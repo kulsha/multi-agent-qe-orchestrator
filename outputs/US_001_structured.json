@@ -1,0 +1,145 @@
+{
+  "pipeline_meta": {
+    "generated_by": "Agent 1 — Story Intake Agent",
+    "generated_at": "2026-04-21T22:52:34.667244",
+    "source_file": "US_001_login.md",
+    "agent_version": "1.0"
+  },
+  "story": {
+    "story_id": "US_001",
+    "feature": "Login & Authentication",
+    "application": "OrangeHRM",
+    "module": "Auth",
+    "priority": "High",
+    "created_by": "QA Lead",
+    "target_url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
+    "problem_statement": "OrangeHRM requires a secure login mechanism so that only authorised users can access the system. Users must be able to log in using a valid username and password combination. The system must prevent unauthorised access by rejecting invalid credentials and displaying appropriate error messages. The login page must also handle edge cases such as empty fields, whitespace-only input, and special characters in credentials. After a successful login, the user must be redirected to the HR dashboard. After a failed login, the user must remain on the login page with a clear error message. ---",
+    "acceptance_criteria": [
+      {
+        "id": "AC_001",
+        "title": "Successful Login with Valid Credentials",
+        "given": "the user is on the OrangeHRM login page",
+        "when": "the user enters a valid username (Admin) and valid password (admin123)",
+        "then": [
+          "the user should be redirected to the HR Dashboard",
+          "the dashboard URL should contain /dashboard",
+          "the user's name should be visible in the top navigation bar"
+        ],
+        "raw": "### AC_001 — Successful Login with Valid Credentials\n**Given** the user is on the OrangeHRM login page\n**When** the user enters a valid username (Admin) and valid password (admin123)\n**Then** the user should be redirected to the HR Dashboard\n**And** the dashboard URL should contain /dashboard\n**And** the user's name should be visible in the top navigation bar"
+      },
+      {
+        "id": "AC_002",
+        "title": "Login Fails with Invalid Password",
+        "given": "the user is on the OrangeHRM login page",
+        "when": "the user enters a valid username (Admin) and an incorrect password",
+        "then": [
+          "the login should fail",
+          "an error message \"Invalid credentials\" should be displayed",
+          "the user should remain on the login page"
+        ],
+        "raw": "### AC_002 — Login Fails with Invalid Password\n**Given** the user is on the OrangeHRM login page\n**When** the user enters a valid username (Admin) and an incorrect password\n**Then** the login should fail\n**And** an error message \"Invalid credentials\" should be displayed\n**And** the user should remain on the login page"
+      },
+      {
+        "id": "AC_003",
+        "title": "Login Fails with Invalid Username",
+        "given": "the user is on the OrangeHRM login page",
+        "when": "the user enters an invalid username and any password",
+        "then": [
+          "the login should fail",
+          "an error message \"Invalid credentials\" should be displayed",
+          "the user should remain on the login page"
+        ],
+        "raw": "### AC_003 — Login Fails with Invalid Username\n**Given** the user is on the OrangeHRM login page\n**When** the user enters an invalid username and any password\n**Then** the login should fail\n**And** an error message \"Invalid credentials\" should be displayed\n**And** the user should remain on the login page"
+      },
+      {
+        "id": "AC_004",
+        "title": "Login Fails with Empty Username Field",
+        "given": "the user is on the OrangeHRM login page",
+        "when": "the user submits the login form with the username field empty",
+        "then": [
+          "a validation message \"Required\" should appear below the username field",
+          "no API call to the authentication endpoint should be made"
+        ],
+        "raw": "### AC_004 — Login Fails with Empty Username Field\n**Given** the user is on the OrangeHRM login page\n**When** the user submits the login form with the username field empty\n**Then** a validation message \"Required\" should appear below the username field\n**And** no API call to the authentication endpoint should be made"
+      },
+      {
+        "id": "AC_005",
+        "title": "Login Fails with Empty Password Field",
+        "given": "the user is on the OrangeHRM login page",
+        "when": "the user submits the login form with the password field empty",
+        "then": [
+          "a validation message \"Required\" should appear below the password field",
+          "no API call to the authentication endpoint should be made"
+        ],
+        "raw": "### AC_005 — Login Fails with Empty Password Field\n**Given** the user is on the OrangeHRM login page\n**When** the user submits the login form with the password field empty\n**Then** a validation message \"Required\" should appear below the password field\n**And** no API call to the authentication endpoint should be made"
+      },
+      {
+        "id": "AC_006",
+        "title": "Login Fails with Both Fields Empty",
+        "given": "the user is on the OrangeHRM login page",
+        "when": "the user clicks the Login button without entering any credentials",
+        "then": [
+          "validation messages \"Required\" should appear below both fields",
+          "the user should remain on the login page"
+        ],
+        "raw": "### AC_006 — Login Fails with Both Fields Empty\n**Given** the user is on the OrangeHRM login page\n**When** the user clicks the Login button without entering any credentials\n**Then** validation messages \"Required\" should appear below both fields\n**And** the user should remain on the login page"
+      },
+      {
+        "id": "AC_007",
+        "title": "Password Field Masks Input",
+        "given": "the user is on the OrangeHRM login page",
+        "when": "the user types into the password field",
+        "then": [
+          "the input should be masked with dots or asterisks",
+          "the field type should be \"password\""
+        ],
+        "raw": "### AC_007 — Password Field Masks Input\n**Given** the user is on the OrangeHRM login page\n**When** the user types into the password field\n**Then** the input should be masked with dots or asterisks\n**And** the field type should be \"password\""
+      },
+      {
+        "id": "AC_008",
+        "title": "Login Page UI Elements Are Present",
+        "given": "the user navigates to the OrangeHRM login page",
+        "when": "the page loads completely",
+        "then": [
+          "the following elements should be visible:",
+          "Username input field",
+          "Password input field",
+          "Login button",
+          "OrangeHRM logo"
+        ],
+        "raw": "### AC_008 — Login Page UI Elements Are Present\n**Given** the user navigates to the OrangeHRM login page\n**When** the page loads completely\n**Then** the following elements should be visible:\n- Username input field\n- Password input field\n- Login button\n- OrangeHRM logo\n\n---"
+      }
+    ],
+    "acceptance_criteria_count": 8,
+    "acceptance_criteria_ids": [
+      "AC_001",
+      "AC_002",
+      "AC_003",
+      "AC_004",
+      "AC_005",
+      "AC_006",
+      "AC_007",
+      "AC_008"
+    ],
+    "test_data": [
+      {
+        "Field": "Username",
+        "Valid Value": "Admin",
+        "Invalid Value": "invaliduser",
+        "Edge Case": "(empty), whitespace"
+      },
+      {
+        "Field": "Password",
+        "Valid Value": "admin123",
+        "Invalid Value": "wrongpassword",
+        "Edge Case": "(empty), whitespace"
+      }
+    ],
+    "out_of_scope": [
+      "Password reset flow",
+      "Multi-factor authentication",
+      "Session timeout behaviour",
+      "SSO / LDAP login"
+    ]
+  }
+}
