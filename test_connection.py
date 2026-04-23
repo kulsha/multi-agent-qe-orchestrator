@@ -46,7 +46,7 @@ async def test_connection():
 
     # ✅ Run task
     result = await team.run(
-        task="Say exactly this and nothing else: CONNECTION SUCCESSFUL — AutoGen + Groq is working. Then say TERMINATE"
+        task="Say exactly this and nothing else: CONNECTION SUCCESSFUL — AutoGen + Mistral is working. Then say TERMINATE"
     )
 
     # ✅ Print response
