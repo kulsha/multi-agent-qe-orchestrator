@@ -667,7 +667,7 @@ def generate_html_report(metrics: dict, narrative: str) -> str:
   <div class="footer">
     multi-agent-qe-orchestrator ·
     AutoGen 0.7.5 · Groq LLaMA3 ·
-    Shashank · QA Automation Lead · ISTQB CT-AI
+    Shashank Kulkarni · QA Automation Lead
   </div>
 
 </div>

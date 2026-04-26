@@ -1,0 +1,334 @@
+[
+  {
+    "tc_id": "TC_001_001",
+    "ac_id": "AC_001",
+    "title": "Verify successful login with valid credentials",
+    "test_type": "Positive",
+    "priority": "High",
+    "page_object": "LoginPage",
+    "target_url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
+    "locators": [
+      {
+        "name": "usernameInput",
+        "strategy": "name",
+        "value": "username",
+        "description": "Username input field"
+      },
+      {
+        "name": "passwordInput",
+        "strategy": "name",
+        "value": "password",
+        "description": "Password input field"
+      },
+      {
+        "name": "loginButton",
+        "strategy": "name",
+        "value": "login",
+        "description": "Login button"
+      },
+      {
+        "name": "userNameLink",
+        "strategy": "css",
+        "value": "span.user-name",
+        "description": "User name link in the top navigation bar"
+      }
+    ],
+    "actions": [
+      {
+        "step": 1,
+        "action": "navigate",
+        "target": "",
+        "value": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
+        "description": "Navigate to the login page"
+      },
+      {
+        "step": 2,
+        "action": "fill",
+        "target": "usernameInput",
+        "value": "",
+        "description": "Enter valid username"
+      },
+      {
+        "step": 3,
+        "action": "fill",
+        "target": "passwordInput",
+        "value": "",
+        "description": "Enter valid password"
+      },
+      {
+        "step": 4,
+        "action": "click",
+        "target": "loginButton",
+        "value": "",
+        "description": "Click the Login button"
+      }
+    ],
+    "assertions": [
+      {
+        "type": "url_contains",
+        "target": "",
+        "value": "/dashboard",
+        "description": "Verify URL contains /dashboard"
+      },
+      {
+        "type": "element_visible",
+        "target": "userNameLink",
+        "value": "",
+        "description": "Verify user name link is visible in the top navigation bar"
+      }
+    ],
+    "test_data": {
+      "username": "Admin",
+      "password": "admin123"
+    }
+  },
+  {
+    "tc_id": "TC_001_002",
+    "ac_id": "AC_001",
+    "title": "Verify unsuccessful login with invalid username",
+    "test_type": "Negative",
+    "priority": "High",
+    "page_object": "LoginPage",
+    "target_url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
+    "locators": [
+      {
+        "name": "usernameInput",
+        "strategy": "name",
+        "value": "username",
+        "description": "Username input field"
+      },
+      {
+        "name": "passwordInput",
+        "strategy": "name",
+        "value": "password",
+        "description": "Password input field"
+      },
+      {
+        "name": "loginButton",
+        "strategy": "name",
+        "value": "login",
+        "description": "Login button"
+      },
+      {
+        "name": "invalidCredentialMsg",
+        "strategy": "css",
+        "value": "p.oxd-text.oxd-text--p",
+        "description": "Error message for invalid credentials"
+      }
+    ],
+    "actions": [
+      {
+        "step": 1,
+        "action": "navigate",
+        "target": "",
+        "value": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
+        "description": "Navigate to the login page"
+      },
+      {
+        "step": 2,
+        "action": "fill",
+        "target": "usernameInput",
+        "value": "",
+        "description": "Enter invalid username"
+      },
+      {
+        "step": 3,
+        "action": "fill",
+        "target": "passwordInput",
+        "value": "",
+        "description": "Enter valid password"
+      },
+      {
+        "step": 4,
+        "action": "click",
+        "target": "loginButton",
+        "value": "",
+        "description": "Click the Login button"
+      }
+    ],
+    "assertions": [
+      {
+        "type": "element_visible",
+        "target": "invalidCredentialMsg",
+        "value": "",
+        "description": "Verify error message is displayed for invalid credentials"
+      },
+      {
+        "type": "not_url_contains",
+        "target": "",
+        "value": "/dashboard",
+        "description": "Verify user is not redirected to the dashboard"
+      }
+    ],
+    "test_data": {
+      "username": "invaliduser",
+      "password": "admin123"
+    }
+  },
+  {
+    "tc_id": "TC_001_003",
+    "ac_id": "AC_001",
+    "title": "Verify unsuccessful login with invalid password",
+    "test_type": "Negative",
+    "priority": "High",
+    "page_object": "LoginPage",
+    "target_url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
+    "locators": [
+      {
+        "name": "usernameInput",
+        "strategy": "name",
+        "value": "username",
+        "description": "Username input field"
+      },
+      {
+        "name": "passwordInput",
+        "strategy": "name",
+        "value": "password",
+        "description": "Password input field"
+      },
+      {
+        "name": "loginButton",
+        "strategy": "name",
+        "value": "login",
+        "description": "Login button"
+      },
+      {
+        "name": "invalidCredentialMsg",
+        "strategy": "css",
+        "value": "p.oxd-text.oxd-text--p",
+        "description": "Error message for invalid credentials"
+      }
+    ],
+    "actions": [
+      {
+        "step": 1,
+        "action": "navigate",
+        "target": "",
+        "value": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
+        "description": "Navigate to the login page"
+      },
+      {
+        "step": 2,
+        "action": "fill",
+        "target": "usernameInput",
+        "value": "",
+        "description": "Enter valid username"
+      },
+      {
+        "step": 3,
+        "action": "fill",
+        "target": "passwordInput",
+        "value": "",
+        "description": "Enter invalid password"
+      },
+      {
+        "step": 4,
+        "action": "click",
+        "target": "loginButton",
+        "value": "",
+        "description": "Click the Login button"
+      }
+    ],
+    "assertions": [
+      {
+        "type": "element_visible",
+        "target": "invalidCredentialMsg",
+        "value": "",
+        "description": "Verify error message is displayed for invalid credentials"
+      },
+      {
+        "type": "not_url_contains",
+        "target": "",
+        "value": "/dashboard",
+        "description": "Verify user is not redirected to the dashboard"
+      }
+    ],
+    "test_data": {
+      "username": "Admin",
+      "password": "wrongpassword"
+    }
+  },
+  {
+    "tc_id": "TC_001_004",
+    "ac_id": "AC_001",
+    "title": "Verify unsuccessful login with empty username",
+    "test_type": "Boundary",
+    "priority": "High",
+    "page_object": "LoginPage",
+    "target_url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
+    "locators": [
+      {
+        "name": "usernameInput",
+        "strategy": "name",
+        "value": "username",
+        "description": "Username input field"
+      },
+      {
+        "name": "passwordInput",
+        "strategy": "name",
+        "value": "password",
+        "description": "Password input field"
+      },
+      {
+        "name": "loginButton",
+        "strategy": "name",
+        "value": "login",
+        "description": "Login button"
+      },
+      {
+        "name": "invalidCredentialMsg",
+        "strategy": "css",
+        "value": "p.oxd-text.oxd-text--p",
+        "description": "Error message for invalid credentials"
+      }
+    ],
+    "actions": [
+      {
+        "step": 1,
+        "action": "navigate",
+        "target": "",
+        "value": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
+        "description": "Navigate to the login page"
+      },
+      {
+        "step": 2,
+        "action": "clear",
+        "target": "usernameInput",
+        "value": "",
+        "description": "Leave username field empty"
+      },
+      {
+        "step": 3,
+        "action": "fill",
+        "target": "passwordInput",
+        "value": "",
+        "description": "Enter valid password"
+      },
+      {
+        "step": 4,
+        "action": "click",
+        "target": "loginButton",
+        "value": "",
+        "description": "Click the Login button"
+      }
+    ],
+    "assertions": [
+      {
+        "type": "element_visible",
+        "target": "invalidCredentialMsg",
+        "value": "",
+        "description": "Verify error message is displayed for invalid credentials"
+      },
+      {
+        "type": "not_url_contains",
+        "target": "",
+        "value": "/dashboard",
+        "description": "Verify user is not redirected to the dashboard"
+      }
+    ],
+    "test_data": {
+      "username": "",
+      "password": "admin123"
+    }
+  }
+]
