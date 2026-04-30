@@ -1,7 +1,7 @@
 from playwright.async_api import Page, expect
 
 
-class Login:
+class LoginPage:
     """Page Object Model for Orange HRM Login page."""
 
     def __init__(self, page: Page):
@@ -31,7 +31,7 @@ class Login:
     @property
     def username_navbar(self):
         """Locator for username in top navigation bar."""
-        return self.page.locator("div[class='oxd-userdropdown']")
+        return self.page.locator(".oxd-userdropdown")
 
     @property
     def error_message(self):
