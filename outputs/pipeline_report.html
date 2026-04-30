@@ -83,8 +83,8 @@
   }
   .coverage-bar-fill {
     height: 100%; border-radius: 8px;
-    background: #ef4444;
-    width: 33.0%;
+    background: #f59e0b;
+    width: 67.0%;
     transition: width 1s ease;
   }
   .coverage-label {
@@ -186,7 +186,7 @@
     <p class="subtitle">
       US_001_poc — Login & Authentication |
       OrangeHRM |
-      Generated 2026-04-25 23:36
+      Generated 2026-04-30 23:41
     </p>
   </div>
 
@@ -199,11 +199,11 @@
         <div class="metric-label">Acceptance Criteria</div>
       </div>
       <div class="metric">
-        <div class="metric-value">19</div>
+        <div class="metric-value">21</div>
         <div class="metric-label">Test Cases Generated</div>
       </div>
       <div class="metric">
-        <div class="metric-value">17</div>
+        <div class="metric-value">21</div>
         <div class="metric-label">Script Outlines</div>
       </div>
       <div class="metric">
@@ -211,12 +211,12 @@
         <div class="metric-label">Test Script Files</div>
       </div>
       <div class="metric">
-        <div class="metric-value">300</div>
+        <div class="metric-value">951</div>
         <div class="metric-label">Lines of Code</div>
       </div>
       <div class="metric">
         <div class="metric-value">
-          33<span>%</span>
+          67<span>%</span>
         </div>
         <div class="metric-label">Test Coverage</div>
       </div>
@@ -231,19 +231,19 @@
     <div class="type-pills">
         <div class="type-pill" style="background:#10b98120;
              border:1px solid #10b981; color:#10b981">
-            Positive: 1
+            Positive: 3
         </div>
         <div class="type-pill" style="background:#ef444420;
              border:1px solid #ef4444; color:#ef4444">
-            Negative: 5
+            Negative: 6
         </div>
         <div class="type-pill" style="background:#f59e0b20;
              border:1px solid #f59e0b; color:#f59e0b">
-            Boundary: 8
+            Boundary: 9
         </div>
         <div class="type-pill" style="background:#6366f120;
              border:1px solid #6366f1; color:#6366f1">
-            UI: 5
+            UI: 3
         </div></div>
   </div>
 
@@ -252,8 +252,8 @@
     <div class="card-title">Coverage Analysis</div>
     <div class="coverage-label">
       <span>0%</span>
-      <span style="color:#ef4444;font-weight:700;">
-        33% Coverage
+      <span style="color:#f59e0b;font-weight:700;">
+        67% Coverage
       </span>
       <span>100%</span>
     </div>
@@ -270,7 +270,7 @@
       <div class="review-row">
         <span>Coverage Gaps Identified</span>
         <span style="color:#f59e0b;font-weight:600;">
-          10
+          22
         </span>
       </div>
     </div>
@@ -288,13 +288,13 @@
     <div class="review-row">
       <span>Critical Issues</span>
       <span class="severity-badge critical">
-        13 Critical
+        17 Critical
       </span>
     </div>
     <div class="review-row">
       <span>Major Issues</span>
       <span class="severity-badge major">
-        10 Major
+        16 Major
       </span>
     </div>
     <div class="review-row">
@@ -308,7 +308,7 @@
     <div class="card-title">Business Value</div>
     <div class="highlight-box">
       <div class="highlight-big">
-        9.5h
+        10.0h
       </div>
       <div class="highlight-sub">
         of manual QA effort replaced by the pipeline
@@ -318,19 +318,19 @@
       <div class="review-row">
         <span>Estimated Manual Effort</span>
         <span style="color:var(--white);">
-          ~9.5 hours
+          ~10.0 hours
         </span>
       </div>
       <div class="review-row">
         <span>Pipeline Runtime</span>
         <span style="color:var(--white);">
-          ~26 minutes
+          ~27 minutes
         </span>
       </div>
       <div class="review-row">
         <span>Time Saved</span>
         <span style="color:#10b981;font-weight:700;">
-          ~95%
+          ~96%
         </span>
       </div>
     </div>
@@ -340,7 +340,7 @@
   <div class="card">
     <div class="card-title">Executive Summary</div>
     <div class="narrative">
-      <p>The QA pipeline ran on the US_001_poc story, focusing on Login and Authentication functionality within the OrangeHRM application. It analysed three acceptance criteria and executed 19 test cases, utilizing three script files with approximately 300 lines of code, along with one POM class. The pipeline took approximately 26 minutes to complete, a significant reduction in time compared to manual testing efforts, which would have taken around 9.5 hours to achieve the same level of test coverage.</p><p>The pipeline's review and coverage analysis revealed 13 critical and 10 major review issues, highlighting areas that require attention to ensure the quality and reliability of the application. The overall test coverage was recorded at 33%, indicating that there are still opportunities to expand the testing scope and improve the application's reliability. Despite this, the pipeline's findings provide valuable insights into the application's current state, empowering the QA team to prioritise and address the identified issues.</p><p>The successful execution of the QA pipeline demonstrates substantial business value, primarily in terms of time saved. By automating testing efforts, the pipeline replaced approximately 9.5 hours of manual testing with a 26-minute automated run, resulting in a time savings of around 95%. This significant reduction in testing time enables QA teams to reallocate resources to focus on higher-value tasks, such as exploring new testing scenarios, refining test cases, or expanding test coverage. Ultimately, the pipeline's efficiency and effectiveness will contribute to improved testing productivity, enhanced application quality, and faster time-to-market for new features and updates.</p>
+      <p>The QA automation pipeline executed a comprehensive analysis of the Login and Authentication feature for the OrangeHRM application, processing all three acceptance criteria associated with user story US_001_poc. The pipeline generated 21 test cases across three script files totaling 951 lines of code, supported by two Page Object Model classes for maintainability and reusability. The entire generation and analysis cycle completed in approximately 27 minutes, demonstrating the efficiency of automated test development compared to manual scripting approaches.</p><p>The quality review identified 33 issues requiring attention, with 17 flagged as critical and 16 as major defects. These issues span functional gaps, test design problems, and code quality concerns that would impact the reliability of the test suite in production environments. The test coverage analysis achieved 67 percent coverage across the authentication workflows, indicating reasonable scope but with some edge cases and error scenarios still requiring manual test case definition or script enhancement to achieve comprehensive protection of this critical feature.</p><p>The pipeline delivered substantial business value by replacing approximately ten hours of manual test development and review effort with an automated process, representing a 96 percent reduction in time to generate and validate test assets. This efficiency gain enables QA teams to redirect skilled resources toward exploratory testing, test strategy refinement, and higher-value activities rather than routine script creation. As the team addresses the identified critical and major issues, this automation foundation will provide a reusable, maintainable test suite for the authentication module while accelerating future testing cycles for related features and regression testing scenarios.</p>
     </div>
   </div>
 
@@ -348,7 +348,7 @@
   <div class="footer">
     multi-agent-qe-orchestrator ·
     AutoGen 0.7.5 · Groq LLaMA3 ·
-    Shashank · QA Automation Lead · ISTQB CT-AI
+    Shashank Kulkarni · QA Automation Lead
   </div>
 
 </div>

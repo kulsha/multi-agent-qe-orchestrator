@@ -15,7 +15,7 @@ WHY THIS INSTEAD OF BDD:
 
 LLM USED:
     Configurable — Groq or any provider via --provider flag.
-    Includes JSON repair for smaller local models.
+    Includes aggressive JSON repair for all model types.
 
 INPUT  : outputs/test_cases/US_001_test_cases.csv
 OUTPUT : outputs/features/US_001_script_outline.json
@@ -60,6 +60,9 @@ RULES:
 5. Use POM naming conventions for locator names.
 6. No markdown fences. No explanation. Raw JSON array only.
 7. Use only double quotes in JSON. No trailing commas.
+8. For whitespace test data use a single space value not multiple spaces.
+9. Never include raw whitespace-only strings in JSON values.
+10. All JSON property values must be valid JSON strings.
 
 PLAYWRIGHT ACTIONS: navigate, fill, click, clear, wait, get_text, get_attr
 ASSERTION TYPES: url_contains, element_visible, element_hidden,
@@ -80,13 +83,25 @@ def load_test_cases(csv_path: Path) -> list:
     """
     Reads the CSV produced by Agent 2.
     Returns a list of dicts, one per test case row.
+    Sanitises whitespace values that break JSON generation.
     """
     test_cases = []
     with open(csv_path, 'r', encoding='utf-8') as f:
         reader = csv.DictReader(f)
         for row in reader:
             try:
-                row['test_data'] = json.loads(row.get('test_data', '{}'))
+                raw_data = row.get('test_data', '{}')
+                data     = json.loads(raw_data)
+                # Sanitise whitespace-only values
+                sanitised = {}
+                for k, v in data.items():
+                    if isinstance(v, str) and v.strip() == '':
+                        sanitised[k] = "(empty)"
+                    elif isinstance(v, str) and len(v.strip()) == 0:
+                        sanitised[k] = "(whitespace)"
+                    else:
+                        sanitised[k] = v
+                row['test_data'] = sanitised
             except json.JSONDecodeError:
                 row['test_data'] = {}
             test_cases.append(row)
@@ -98,11 +113,26 @@ def load_test_cases(csv_path: Path) -> list:
 def build_single_prompt(tc: dict, target_url: str) -> str:
     """
     Builds a minimal prompt for a single test case.
-    Deliberately short to conserve tokens.
+    Sanitises test data to prevent JSON generation errors.
     """
     steps = " | ".join(
         tc.get('test_steps', '').split(' | ')[:5]
     )
+
+    # Sanitise test data for prompt — replace whitespace values
+    test_data = tc.get('test_data', {})
+    safe_data = {}
+    for k, v in test_data.items():
+        if isinstance(v, str):
+            stripped = v.strip()
+            if stripped == '':
+                safe_data[k] = "(empty string)"
+            elif stripped != v:
+                safe_data[k] = "(whitespace only)"
+            else:
+                safe_data[k] = v
+        else:
+            safe_data[k] = v
 
     return f"""
 Convert this QA test case to a Playwright outline JSON array (1 item).
@@ -112,10 +142,11 @@ Title: {tc.get('title')}
 URL: {target_url}
 Steps: {steps}
 Expected: {tc.get('expected_result', '')[:120]}
-Data: {json.dumps(tc.get('test_data', {}))}
+Data: {json.dumps(safe_data)}
 
 Return ONLY a JSON array with one outline object.
 Use double quotes only. No trailing commas. No markdown.
+All string values must be valid JSON — no raw whitespace strings.
 """.strip()
 
 
@@ -124,8 +155,9 @@ Use double quotes only. No trailing commas. No markdown.
 def parse_llm_response(raw: str, expect_list: bool = False):
     """
     Extracts JSON from LLM response.
-    Includes aggressive cleaning for small local models that
-    occasionally produce slightly malformed JSON.
+    Includes aggressive cleaning for all model types.
+    Handles the specific whitespace comma delimiter error
+    that occurs with boundary test cases.
     """
     text = raw.strip()
 
@@ -135,19 +167,33 @@ def parse_llm_response(raw: str, expect_list: bool = False):
                  if not l.strip().startswith("```")]
         text  = "\n".join(lines).strip()
 
-    # Remove control characters that break JSON parsing
-    # (common in llama3.2 3B output)
+    # Remove control characters
     text = re.sub(r'[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]', '', text)
 
-    # Fix trailing commas before closing brackets/braces
+    # Fix trailing commas before closing brackets
     text = re.sub(r',\s*}', '}', text)
     text = re.sub(r',\s*]', ']', text)
 
-    # Fix single quotes used instead of double quotes
-    # Only applies to keys and simple string values
-    text = re.sub(r"'([^']*)'", r'"\1"', text)
 
-    # Remove any text before the JSON starts
+    # Fix whitespace-only string values that cause comma errors
+    # e.g. "value": "   " — replace with safe placeholder
+    text = re.sub(r':\s*"\s{2,}"', ': "(whitespace)"', text)
+    text = re.sub(r':\s*"\s+"', ': "(whitespace)"', text)
+
+    # Fix unescaped newlines inside JSON string values
+    text = re.sub(r'(?<!\\)\n(?=[^"]*"[^"]*")', ' ', text)
+
+    # Fix missing comma between JSON object properties
+    # Pattern: ends with quote, newline, starts with quote-key
+    text = re.sub(
+        r'(")\s*\n\s*("(?!:))',
+        r'\1,\n\2',
+        text
+    )
+
+    # Fix missing comma between array elements
+    text = re.sub(r'}\s*\n\s*{', '}, {', text)
+
     if expect_list:
         start = text.find('[')
         end   = text.rfind(']') + 1
@@ -388,10 +434,11 @@ def run(
     """
     Orchestrates Agent 3 end-to-end:
     1. Loads test cases CSV from Agent 2
-    2. Calls LLM once per test case with minimal prompt
-    3. Builds POM summary from all outlines
-    4. Saves full output JSON to /outputs/features/
-    5. Returns the complete outline package
+    2. Sanitises whitespace test data values
+    3. Calls LLM once per test case with minimal prompt
+    4. Builds POM summary from all outlines
+    5. Saves full output JSON to /outputs/features/
+    6. Returns the complete outline package
     """
     csv_path = TEST_CASE_DIR / csv_file
 

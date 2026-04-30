@@ -1,0 +1,63 @@
+{
+  "pipeline_meta": {
+    "generated_by": "Agent 1 — Story Intake Agent",
+    "generated_at": "2026-04-27T22:53:45.789599",
+    "source_file": "US_001_login_poc.md",
+    "agent_version": "1.0"
+  },
+  "story": {
+    "problem_statement": "",
+    "acceptance_criteria": [
+      {
+        "id": "AC_001",
+        "title": "Successful Login with Valid Credentials",
+        "given": "the user is on the OrangeHRM login page",
+        "when": "the user enters a valid username (Admin) and valid password (admin123)",
+        "then": [
+          "the user should be redirected to the HR Dashboard",
+          "the dashboard URL should contain /dashboard",
+          "the user's name should be visible in the top navigation bar"
+        ],
+        "raw": "### AC_001 — Successful Login with Valid Credentials\n**Given** the user is on the OrangeHRM login page\n**When** the user enters a valid username (Admin) and valid password (admin123)\n**Then** the user should be redirected to the HR Dashboard\n**And** the dashboard URL should contain /dashboard\n**And** the user's name should be visible in the top navigation bar"
+      },
+      {
+        "id": "AC_002",
+        "title": "Login Validation Behaviour",
+        "given": "the user is on the OrangeHRM login page",
+        "when": "the user enters valid credentials (Admin / admin123)",
+        "then": [
+          "the user should be successfully logged in and redirected to dashboard",
+          "when the user enters invalid credentials (wrong username or password)",
+          "**Then** an error message \"Invalid credentials\" should be displayed",
+          "the user should remain on the login page",
+          "when the user submits the form with empty username or password fields",
+          "**Then** a validation message \"Required\" should appear below the empty field"
+        ],
+        "raw": "### AC_002 — Login Validation Behaviour\n**Given** the user is on the OrangeHRM login page\n**When** the user enters valid credentials (Admin / admin123)\n**Then** the user should be successfully logged in and redirected to dashboard\n**And** when the user enters invalid credentials (wrong username or password)\n**Then** an error message \"Invalid credentials\" should be displayed\n**And** the user should remain on the login page\n**And** when the user submits the form with empty username or password fields\n**Then** a validation message \"Required\" should appear below the empty field"
+      },
+      {
+        "id": "AC_003",
+        "title": "Login Page Elements and Interaction",
+        "given": "the user navigates to the OrangeHRM login page",
+        "when": "the page loads completely",
+        "then": [
+          "the username input field should be visible and accept text input",
+          "the password input field should be visible and mask typed characters",
+          "the Login button should be visible and clickable",
+          "the OrangeHRM logo should be visible on the page",
+          "when valid credentials are entered and Login is clicked",
+          "**Then** the form should submit and process the authentication request"
+        ],
+        "raw": "### AC_003 — Login Page Elements and Interaction\n**Given** the user navigates to the OrangeHRM login page\n**When** the page loads completely\n**Then** the username input field should be visible and accept text input\n**And** the password input field should be visible and mask typed characters\n**And** the Login button should be visible and clickable\n**And** the OrangeHRM logo should be visible on the page\n**And** when valid credentials are entered and Login is clicked\n**Then** the form should submit and process the authentication request"
+      }
+    ],
+    "acceptance_criteria_count": 3,
+    "acceptance_criteria_ids": [
+      "AC_001",
+      "AC_002",
+      "AC_003"
+    ],
+    "test_data": [],
+    "out_of_scope": []
+  }
+}

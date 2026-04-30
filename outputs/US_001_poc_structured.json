@@ -1,7 +1,7 @@
 {
   "pipeline_meta": {
     "generated_by": "Agent 1 — Story Intake Agent",
-    "generated_at": "2026-04-26T22:29:36.186651",
+    "generated_at": "2026-04-30T23:38:35.539949",
     "source_file": "US_001_login_poc.md",
     "agent_version": "1.0"
   },
@@ -13,7 +13,7 @@
     "priority": "High",
     "created_by": "QA Lead",
     "target_url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
-    "problem_statement": "OrangeHRM requires a secure login mechanism so that only authorised users can access the system. Users must be able to log in using a valid username and password combination. The system must prevent unauthorised access by rejecting invalid credentials and displaying appropriate error messages. After a successful login the user must be redirected to the HR dashboard. After a failed login the user must remain on the login page with a clear error message. The login page must display all required UI elements on load. ---",
+    "problem_statement": "OrangeHRM requires a secure login mechanism so that only authorised users can access the system. Users must be able to log in using a valid username and password combination. The system must prevent unauthorised access by rejecting invalid credentials and displaying appropriate error messages. After a successful login the user must be redirected to the HR dashboard. After a failed login the user must remain on the login page with a clear error message. The login page must display all required UI elements on load and all interactive elements must function correctly. ---",
     "acceptance_criteria": [
       {
         "id": "AC_001",
@@ -23,35 +23,45 @@
         "then": [
           "the user should be redirected to the HR Dashboard",
           "the dashboard URL should contain /dashboard",
-          "the user's name should be visible in the top navigation bar"
+          "the user's name should be visible in the top navigation bar",
+          "when the user enters an invalid username or incorrect password",
+          "**Then** the login should fail and the user should remain on the login page"
         ],
-        "raw": "### AC_001 — Successful Login with Valid Credentials\n**Given** the user is on the OrangeHRM login page\n**When** the user enters a valid username (Admin) and valid password (admin123)\n**Then** the user should be redirected to the HR Dashboard\n**And** the dashboard URL should contain /dashboard\n**And** the user's name should be visible in the top navigation bar"
+        "raw": "### AC_001 — Successful Login with Valid Credentials\n**Given** the user is on the OrangeHRM login page\n**When** the user enters a valid username (Admin) and valid password (admin123)\n**Then** the user should be redirected to the HR Dashboard\n**And** the dashboard URL should contain /dashboard\n**And** the user's name should be visible in the top navigation bar\n**And** when the user enters an invalid username or incorrect password\n**Then** the login should fail and the user should remain on the login page"
       },
       {
         "id": "AC_002",
-        "title": "Login Fails with Invalid Credentials",
+        "title": "Login Validation Behaviour",
         "given": "the user is on the OrangeHRM login page",
-        "when": "the user enters an invalid username or incorrect password",
+        "when": "the user enters valid credentials (Admin / admin123)",
         "then": [
-          "the login should fail",
-          "an error message \"Invalid credentials\" should be displayed",
-          "the user should remain on the login page"
+          "the user should be successfully redirected to the dashboard",
+          "when the user enters an invalid username (invaliduser) with any password",
+          "**Then** an error message \"Invalid credentials\" should be displayed",
+          "when the user enters a valid username with an incorrect password (wrongpassword)",
+          "**Then** an error message \"Invalid credentials\" should be displayed",
+          "when the user enters whitespace or empty values in either field",
+          "**Then** appropriate validation feedback should be shown",
+          "the user should remain on the login page in all failure cases"
         ],
-        "raw": "### AC_002 — Login Fails with Invalid Credentials\n**Given** the user is on the OrangeHRM login page\n**When** the user enters an invalid username or incorrect password\n**Then** the login should fail\n**And** an error message \"Invalid credentials\" should be displayed\n**And** the user should remain on the login page"
+        "raw": "### AC_002 — Login Validation Behaviour\n**Given** the user is on the OrangeHRM login page\n**When** the user enters valid credentials (Admin / admin123)\n**Then** the user should be successfully redirected to the dashboard\n**And** when the user enters an invalid username (invaliduser) with any password\n**Then** an error message \"Invalid credentials\" should be displayed\n**And** when the user enters a valid username with an incorrect password (wrongpassword)\n**Then** an error message \"Invalid credentials\" should be displayed\n**And** when the user enters whitespace or empty values in either field\n**Then** appropriate validation feedback should be shown\n**And** the user should remain on the login page in all failure cases"
       },
       {
         "id": "AC_003",
-        "title": "Login Page UI Elements Are Present",
+        "title": "Login Page Elements and Interaction",
         "given": "the user navigates to the OrangeHRM login page",
         "when": "the page loads completely",
         "then": [
-          "the following elements should be visible:",
-          "Username input field",
-          "Password input field",
-          "Login button",
-          "OrangeHRM logo"
+          "the username input field should be visible and accept text input",
+          "the password input field should be visible and mask typed characters",
+          "the Login button should be visible and clickable",
+          "the OrangeHRM logo should be visible on the page",
+          "when valid credentials are entered and Login is clicked",
+          "**Then** the form should submit successfully and authenticate the user",
+          "when invalid credentials are entered and Login is clicked",
+          "**Then** the form should show an error without navigating away from the page"
         ],
-        "raw": "### AC_003 — Login Page UI Elements Are Present\n**Given** the user navigates to the OrangeHRM login page\n**When** the page loads completely\n**Then** the following elements should be visible:\n- Username input field\n- Password input field\n- Login button\n- OrangeHRM logo\n\n---"
+        "raw": "### AC_003 — Login Page Elements and Interaction\n**Given** the user navigates to the OrangeHRM login page\n**When** the page loads completely\n**Then** the username input field should be visible and accept text input\n**And** the password input field should be visible and mask typed characters\n**And** the Login button should be visible and clickable\n**And** the OrangeHRM logo should be visible on the page\n**And** when valid credentials are entered and Login is clicked\n**Then** the form should submit successfully and authenticate the user\n**And** when invalid credentials are entered and Login is clicked\n**Then** the form should show an error without navigating away from the page\n\n---"
       }
     ],
     "acceptance_criteria_count": 3,
@@ -79,7 +89,6 @@
       "Multi-factor authentication",
       "Session timeout behaviour",
       "SSO / LDAP login",
-      "Empty field validation messages",
       "Password masking verification"
     ]
   }
