@@ -1,6 +1,6 @@
 # Coverage Report — US_001_poc
 
-**Generated:** 2026-04-30 23:41
+**Generated:** 2026-05-02 00:48
 **Agent:** Agent 6 — Coverage Analyzer
 
 ---
@@ -26,36 +26,36 @@
 | AC ID | Test Cases | Types | Status |
 |---|---|---|---|
 | AC_001 | 7 | Boundary, Negative, Positive | ✅ Full |
-| AC_002 | 8 | Boundary, Negative, Positive | ✅ Full |
-| AC_003 | 6 | Negative, Positive, UI | ✅ Full |
+| AC_002 | 10 | Boundary, Negative, Positive | ✅ Full |
+| AC_003 | 10 | Negative, Positive, UI | ✅ Full |
 
 ## Coverage Gaps
 
-- 1. **POM Architecture Violation**: Direct page.locator() calls in test assertions (TC_001_001, TC_001_002, TC_002_001-008, TC_003_001-006) bypass the Page Object Model layer, violating established automation patterns. Referenced POM methods do not exist in LoginPage class.
-- 2. **POM Class Naming Mismatch**: Tests import "Login" class but provided POM is "LoginPage" - causing import failures and preventing any test execution.
-- 3. **Missing Error Message Validation**: Negative test cases (TC_001_002-007, TC_002_002-008) do not verify actual error message text ("Invalid credentials"), only checking that login fails. AC_002 specifically requires error message display validation.
-- 4. **Dashboard URL Verification Missing**: AC_001 requires assertion that dashboard URL contains "/dashboard" - no test cases explicitly verify this condition.
-- 5. **User Name Display Verification Missing**: AC_001 requires "user's name should be visible in top navigation bar" - no test cases validate this assertion.
-- 6. **Whitespace/Empty Field Validation Incomplete**: AC_002 requires validation for whitespace and empty values - coverage appears insufficient with no explicit boundary test cases for these conditions visible in mapping.
-- 7. **Missing Page Load Synchronization**: No wait_for_load_state("networkidle") after login or navigation - tests may assert before page fully loads, causing flakiness.
-- 8. **No Fixture-Based Browser Management**: Tests manually launch/close browsers instead of using pytest fixtures in conftest.py - violates DRY principle and causes resource management issues.
-- 9. **Hardcoded Test Data**: Credentials ("Admin", "admin123") hardcoded in tests instead of parameterized/fixture-based approach - reduces maintainability and prevents easy credential rotation.
-- 10. **Missing Password Masking Verification Context**: While out of scope, no indication that password field masking is actually tested for completeness of UI validation in AC_003.
+- 1. **POM Architecture Defect**: Tests reference non-existent POM methods (fill_username, fill_password, click_login_button, dashboard_header, error_message, username_error, password_error) — these methods are not implemented in LoginPage class, causing test execution failures.
+- 2. **Resource Leak Risk**: Browser and page objects not properly closed in try/finally blocks or context managers; assertion failures will leak browser instances.
+- 3. **Missing Wait Strategies**: No wait_for_load_state() calls after navigation/page transitions; tests may execute assertions before DOM is fully loaded, causing flaky failures.
+- 4. **Hardcoded Test Data**: Username/password credentials (Admin/admin123) hardcoded in test functions instead of parameterized via fixtures or constants file.
+- 5. **Hardcoded Error Messages**: Expected error messages ("Invalid credentials", "Required") hardcoded in multiple test assertions without centralized constant definitions; maintenance burden and inconsistency risk.
+- 6. **POM Design Inconsistency**: LoginPage class contains duplicate locators (username_input_field + usernameInput, password_input_field + passwordInput); unclear which should be used.
+- 7. **Missing AC_001 UI Validation**: URL pattern verification (/dashboard) and user name visibility in top navigation bar lack explicit assertion coverage; not clearly validated.
+- 8. **AC_003 Element Interaction**: While UI tests are mapped, direct page.locator() calls bypass POM encapsulation; no dedicated POM methods for checking element visibility/clickability.
+- 9. **Incomplete Implementation**: Code review indicates partial implementation of LoginPage class with several expected helper methods not yet defined.
+- 10. **No Assertion Message Context**: Test assertions lack descriptive failure messages; debugging failures will be difficult.
+- ---
 
 ## Recommendations
 
-- 1. **Immediate - Fix POM Class Reference**: Correct import statement from "Login" to "LoginPage" and rebuild all test methods to use only POM methods. Remove all direct page.locator() calls from test assertions.
-- 2. **Immediate - Implement Missing POM Methods**: Verify LoginPage POM contains all referenced methods (fill_username, fill_password, click_login_button, clear_username, clear_password, get_errorMessage_text). Add missing methods to POM.
-- 3. **High Priority - Add Error Message Assertions**: Enhance all negative test cases (TC_001_002-007, TC_002_002-008) to verify exact error message text "Invalid credentials" using POM method get_errorMessage_text().
-- 4. **High Priority - Validate Dashboard URL**: Add explicit assertion in positive test cases (TC_001_001, TC_002_001) to verify dashboard URL contains "/dashboard" using page.url property.
-- 5. **High Priority - Verify User Name Display**: Add assertion in AC_001 positive test cases to check user name visibility in top navigation bar using appropriate POM method (create if missing).
-- 6. **High Priority - Explicit Whitespace Boundary Tests**: Create dedicated boundary test cases for AC_002 covering: empty username field, empty password field, username with only spaces, password with only spaces, null values. Map explicitly to AC_002.
-- 7. **High Priority - Implement Fixture-Based Browser Management**: Create conftest.py with browser and page fixtures; refactor all test files to use fixtures instead of manual browser.launch()/close() calls.
-- 8. **Medium Priority - Parameterize Test Data**: Move hardcoded credentials to pytest.mark.parametrize or pytest fixtures. Create test data management file for credentials and expected outputs.
-- 9. **Medium Priority - Add Page Load Synchronization**: Insert page.wait_for_load_state("networkidle") after each navigation and login action before assertions.
-- 10. **Medium Priority - Enhance UI Test Coverage**: Verify AC_003 tests explicitly check field visibility with is_visible() assertions and button clickability with is_enabled() assertions through POM methods.
-- 11. **Low Priority - Code Quality Improvements**: Add descriptive docstrings to all test functions, implement proper exception handling, and add logging for debugging failed assertions.
-- 12. **Documentation**: Update test case documentation to reflect actual implementation and map error message verification requirements explicitly to test steps.
+- 1. **Implement Missing POM Methods**: Complete LoginPage class implementation with all referenced methods (fill_username, fill_password, click_login_button, get_dashboard_header, get_error_message, etc.) following proper encapsulation patterns.
+- 2. **Establish Centralized Test Data**: Create constants file or pytest fixtures for credentials (VALID_USERNAME = "Admin", VALID_PASSWORD = "admin123") and error messages (ERROR_INVALID_CREDENTIALS = "Invalid credentials").
+- 3. **Add Proper Wait Strategies**: Insert `page.wait_for_load_state("networkidle")` or `"domcontentloaded"` after all navigation actions and form submissions before assertions.
+- 4. **Implement Resource Management**: Wrap all test executions in try/finally blocks or use pytest fixtures with proper cleanup to ensure browser/page closure on all code paths (including failures).
+- 5. **Refactor POM Locators**: Remove duplicate locators from LoginPage class; standardize naming convention (e.g., use snake_case only) and document each locator's purpose.
+- 6. **Enhance AC_001 Coverage**: Add explicit assertion for URL pattern match (assert "/dashboard" in page.url) and test for username visibility in top navigation bar with dedicated POM method like `get_logged_in_user_name()`.
+- 7. **Add Assertion Context Messages**: Update all assertions with descriptive messages: `assert error_message == "Invalid credentials", f"Expected 'Invalid credentials' but got '{error_message}'"`.
+- 8. **Parameterize Negative Test Cases**: Use pytest.mark.parametrize for AC_002 boundary cases (empty username, empty password, whitespace-only inputs, invalid usernames) to reduce code duplication and improve maintainability.
+- 9. **Implement UI Helper Methods in POM**: Add methods like `is_username_field_visible()`, `is_password_field_visible()`, `is_login_button_clickable()`, `is_logo_visible()` to properly encapsulate UI verification logic.
+- 10. **Establish Flakiness Monitoring**: Add retry logic with waits for tests dependent on dynamic UI elements; implement screenshots on failure for debugging.
+- ---
 
 ---
 

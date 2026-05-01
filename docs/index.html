@@ -19,8 +19,6 @@
     padding: 40px 20px;
   }
   .container { max-width: 960px; margin: 0 auto; }
-
-  /* Header */
   .header { text-align: center; margin-bottom: 48px; }
   .badge {
     display: inline-block;
@@ -38,8 +36,6 @@
   }
   h1 span { color: var(--accent); }
   .subtitle { color: var(--muted); font-size: 14px; }
-
-  /* Cards */
   .card {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -52,8 +48,6 @@
     color: var(--accent); font-family: monospace;
     text-transform: uppercase; margin-bottom: 20px;
   }
-
-  /* Metrics grid */
   .metrics-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -74,8 +68,6 @@
     font-size: 12px; color: var(--muted);
     line-height: 1.4;
   }
-
-  /* Coverage bar */
   .coverage-bar-bg {
     background: var(--surface2);
     border-radius: 8px; height: 12px;
@@ -91,8 +83,6 @@
     display: flex; justify-content: space-between;
     font-size: 13px; color: var(--muted);
   }
-
-  /* Review table */
   .review-row {
     display: flex; justify-content: space-between;
     align-items: center; padding: 12px 0;
@@ -105,16 +95,11 @@
   }
   .critical { background: rgba(239,68,68,0.15); color: #ef4444; }
   .major    { background: rgba(245,158,11,0.15); color: #f59e0b; }
-  .minor    { background: rgba(100,116,139,0.15); color: #94a3b8; }
-
-  /* Test types */
   .type-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
   .type-pill {
     padding: 4px 12px; border-radius: 20px;
     font-size: 12px; font-weight: 500;
   }
-
-  /* AC badges */
   .ac-badges { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
   .ac-badge {
     background: rgba(0,212,255,0.1);
@@ -123,15 +108,11 @@
     border-radius: 6px; font-size: 12px;
     font-family: monospace;
   }
-
-  /* Narrative */
   .narrative p {
     color: var(--text); line-height: 1.8;
     margin-bottom: 14px;
   }
   .narrative p:last-child { margin-bottom: 0; }
-
-  /* Readiness */
   .readiness-badge {
     display: inline-block;
     background: rgba(0,212,255,0.1);
@@ -141,8 +122,6 @@
     font-size: 16px; font-weight: 700;
     margin-top: 8px;
   }
-
-  /* Time saved highlight */
   .highlight-box {
     background: linear-gradient(
       135deg,
@@ -161,8 +140,6 @@
     font-size: 14px; color: var(--muted);
     margin-top: 6px;
   }
-
-  /* Footer */
   .footer {
     text-align: center; margin-top: 48px;
     padding-top: 20px;
@@ -170,7 +147,6 @@
     color: var(--muted); font-size: 12px;
     font-family: monospace;
   }
-
   @media (max-width: 600px) {
     .metrics-grid { grid-template-columns: 1fr 1fr; }
   }
@@ -179,18 +155,16 @@
 <body>
 <div class="container">
 
-  <!-- Header -->
   <div class="header">
     <div class="badge">QA PIPELINE REPORT</div>
     <h1>multi-agent-qe-<span>orchestrator</span></h1>
     <p class="subtitle">
       US_001_poc — Login & Authentication |
       OrangeHRM |
-      Generated 2026-04-30 23:41
+      Generated 2026-05-02 00:48
     </p>
   </div>
 
-  <!-- Key Metrics -->
   <div class="card">
     <div class="card-title">Pipeline Metrics</div>
     <div class="metrics-grid">
@@ -199,11 +173,11 @@
         <div class="metric-label">Acceptance Criteria</div>
       </div>
       <div class="metric">
-        <div class="metric-value">21</div>
+        <div class="metric-value">27</div>
         <div class="metric-label">Test Cases Generated</div>
       </div>
       <div class="metric">
-        <div class="metric-value">21</div>
+        <div class="metric-value">27</div>
         <div class="metric-label">Script Outlines</div>
       </div>
       <div class="metric">
@@ -211,7 +185,7 @@
         <div class="metric-label">Test Script Files</div>
       </div>
       <div class="metric">
-        <div class="metric-value">951</div>
+        <div class="metric-value">1088</div>
         <div class="metric-label">Lines of Code</div>
       </div>
       <div class="metric">
@@ -221,11 +195,9 @@
         <div class="metric-label">Test Coverage</div>
       </div>
     </div>
-
     <div class="ac-badges"><span class="ac-badge">AC_001</span><span class="ac-badge">AC_002</span><span class="ac-badge">AC_003</span></div>
   </div>
 
-  <!-- Test Types -->
   <div class="card">
     <div class="card-title">Test Case Distribution</div>
     <div class="type-pills">
@@ -235,19 +207,18 @@
         </div>
         <div class="type-pill" style="background:#ef444420;
              border:1px solid #ef4444; color:#ef4444">
-            Negative: 6
+            Negative: 9
         </div>
         <div class="type-pill" style="background:#f59e0b20;
              border:1px solid #f59e0b; color:#f59e0b">
-            Boundary: 9
+            Boundary: 10
         </div>
         <div class="type-pill" style="background:#6366f120;
              border:1px solid #6366f1; color:#6366f1">
-            UI: 3
+            UI: 5
         </div></div>
   </div>
 
-  <!-- Coverage -->
   <div class="card">
     <div class="card-title">Coverage Analysis</div>
     <div class="coverage-label">
@@ -276,7 +247,6 @@
     </div>
   </div>
 
-  <!-- Code Review -->
   <div class="card">
     <div class="card-title">Code Review Findings</div>
     <div class="review-row">
@@ -288,13 +258,13 @@
     <div class="review-row">
       <span>Critical Issues</span>
       <span class="severity-badge critical">
-        17 Critical
+        11 Critical
       </span>
     </div>
     <div class="review-row">
       <span>Major Issues</span>
       <span class="severity-badge major">
-        16 Major
+        14 Major
       </span>
     </div>
     <div class="review-row">
@@ -303,13 +273,10 @@
     </div>
   </div>
 
-  <!-- Time Saved -->
   <div class="card">
     <div class="card-title">Business Value</div>
     <div class="highlight-box">
-      <div class="highlight-big">
-        10.0h
-      </div>
+      <div class="highlight-big">11.5h</div>
       <div class="highlight-sub">
         of manual QA effort replaced by the pipeline
       </div>
@@ -318,13 +285,13 @@
       <div class="review-row">
         <span>Estimated Manual Effort</span>
         <span style="color:var(--white);">
-          ~10.0 hours
+          ~11.5 hours
         </span>
       </div>
       <div class="review-row">
         <span>Pipeline Runtime</span>
         <span style="color:var(--white);">
-          ~27 minutes
+          ~30 minutes
         </span>
       </div>
       <div class="review-row">
@@ -336,19 +303,17 @@
     </div>
   </div>
 
-  <!-- Narrative -->
   <div class="card">
     <div class="card-title">Executive Summary</div>
     <div class="narrative">
-      <p>The QA automation pipeline executed a comprehensive analysis of the Login and Authentication feature for the OrangeHRM application, processing all three acceptance criteria associated with user story US_001_poc. The pipeline generated 21 test cases across three script files totaling 951 lines of code, supported by two Page Object Model classes for maintainability and reusability. The entire generation and analysis cycle completed in approximately 27 minutes, demonstrating the efficiency of automated test development compared to manual scripting approaches.</p><p>The quality review identified 33 issues requiring attention, with 17 flagged as critical and 16 as major defects. These issues span functional gaps, test design problems, and code quality concerns that would impact the reliability of the test suite in production environments. The test coverage analysis achieved 67 percent coverage across the authentication workflows, indicating reasonable scope but with some edge cases and error scenarios still requiring manual test case definition or script enhancement to achieve comprehensive protection of this critical feature.</p><p>The pipeline delivered substantial business value by replacing approximately ten hours of manual test development and review effort with an automated process, representing a 96 percent reduction in time to generate and validate test assets. This efficiency gain enables QA teams to redirect skilled resources toward exploratory testing, test strategy refinement, and higher-value activities rather than routine script creation. As the team addresses the identified critical and major issues, this automation foundation will provide a reusable, maintainable test suite for the authentication module while accelerating future testing cycles for related features and regression testing scenarios.</p>
+      <p>The AI-powered QA automation pipeline completed a comprehensive analysis of the Login and Authentication feature for the OrangeHRM application, designated as user story US_001_poc. The pipeline ingested three acceptance criteria and synthesized them into 27 comprehensive test cases across three automation script files totaling 1088 lines of code. Additionally, the pipeline generated two Page Object Model classes to support maintainable and scalable test automation. The entire analysis and script generation cycle completed in approximately 30 minutes, demonstrating the efficiency of the automated approach.</p><p>The code review phase identified 25 quality and best practice issues across the generated artifacts, consisting of 11 critical findings and 14 major findings that require remediation before production deployment. These findings primarily relate to security considerations, error handling patterns, and adherence to automation best practices. The test coverage analysis indicates 67% coverage across the defined acceptance criteria, which represents a solid foundation though opportunities exist to enhance coverage of edge cases and error scenarios through additional test case refinement.</p><p>From a business perspective, the pipeline delivered substantial time savings by automating what would have required approximately 11.5 hours of manual test case design, script development, and initial code structuring by human QA engineers. By compressing this work into a 30-minute automated cycle, the pipeline achieved a 96% time reduction in test asset generation. This efficiency gain allows QA teams to redirect their expertise toward high-value activities such as test review, refinement of critical edge cases, and strategic quality assessment rather than routine test script scaffolding, ultimately accelerating time to quality deployment while maintaining rigorous testing standards.</p>
     </div>
   </div>
 
-  <!-- Footer -->
   <div class="footer">
     multi-agent-qe-orchestrator ·
-    AutoGen 0.7.5 · Groq LLaMA3 ·
-    Shashank Kulkarni · QA Automation Lead
+    AutoGen 0.7.5 · Claude Haiku · Groq LLaMA3 ·
+    Shashank Kulkarni · QA Automation Lead · ISTQB CT-AI
   </div>
 
 </div>

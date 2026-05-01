@@ -1,9 +1,9 @@
 {
   "story_id": "US_001_poc",
-  "total_cases": 21,
+  "total_cases": 27,
   "pom_summary": {
-    "Login": {
-      "class_name": "Login",
+    "LoginPage": {
+      "class_name": "LoginPage",
       "target_url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
       "locators": [
         {
@@ -22,89 +22,123 @@
           "name": "login_button",
           "strategy": "css",
           "value": "button[type='submit']",
-          "description": "Login button"
-        },
-        {
-          "name": "username_navbar",
-          "strategy": "css",
-          "value": "div[class='oxd-userdropdown']",
-          "description": "User name in top navigation bar"
-        },
-        {
-          "name": "error_message",
-          "strategy": "css",
-          "value": "p[class='oxd-text oxd-text--p oxd-alert-content-text']",
-          "description": "Error message container"
-        }
-      ],
-      "methods": [
-        "get_current_url()",
-        "get_error_message_text()",
-        "is_username_input_visible()",
-        "is_username_navbar_visible()",
-        "login(username, password)",
-        "navigate()"
-      ]
-    },
-    "LoginPage": {
-      "class_name": "LoginPage",
-      "target_url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
-      "locators": [
-        {
-          "name": "username_input",
-          "strategy": "name",
-          "value": "username",
-          "description": "Username input field on login page"
-        },
-        {
-          "name": "password_input",
-          "strategy": "name",
-          "value": "password",
-          "description": "Password input field on login page"
-        },
-        {
-          "name": "login_button",
-          "strategy": "xpath",
-          "value": "//button[@type='submit']",
           "description": "Login submit button"
         },
         {
-          "name": "username_error_message",
-          "strategy": "xpath",
-          "value": "//span[contains(text(), 'Required')]",
-          "description": "Validation error message for empty username field"
-        },
-        {
-          "name": "password_error_message",
-          "strategy": "xpath",
-          "value": "//span[contains(text(), 'Required')]",
-          "description": "Validation error message for empty password field"
-        },
-        {
-          "name": "orangehrm_logo",
-          "strategy": "xpath",
-          "value": "//div[@class='orangehrm-login-logo']//img",
-          "description": "OrangeHRM logo image on login page"
+          "name": "dashboard_header",
+          "strategy": "css",
+          "value": "h6.oxd-text",
+          "description": "Dashboard page header"
         },
         {
           "name": "error_message",
-          "strategy": "xpath",
-          "value": "//div[@role='alert']",
-          "description": "Error message alert displayed on login failure"
+          "strategy": "css",
+          "value": ".oxd-alert-content-text",
+          "description": "Error message displayed on login failure"
+        },
+        {
+          "name": "username_error",
+          "strategy": "css",
+          "value": ".oxd-input-field-error",
+          "description": "Username field validation error message"
+        },
+        {
+          "name": "password_error",
+          "strategy": "css",
+          "value": ".oxd-input-field-error",
+          "description": "Password field validation error message"
+        },
+        {
+          "name": "username_validation_error",
+          "strategy": "css",
+          "value": ".oxd-input-field-error",
+          "description": "Username field validation error message"
+        },
+        {
+          "name": "error_alert",
+          "strategy": "css",
+          "value": ".oxd-alert-content-text",
+          "description": "Error alert message"
+        },
+        {
+          "name": "password_validation_error",
+          "strategy": "css",
+          "value": ".oxd-input-field-error",
+          "description": "Password field validation error message"
+        },
+        {
+          "name": "validation_error",
+          "strategy": "css",
+          "value": ".oxd-input-field-error",
+          "description": "Field validation error message"
+        },
+        {
+          "name": "login_page_title",
+          "strategy": "css",
+          "value": ".oxd-text-h5",
+          "description": "Login page title to verify page load"
+        },
+        {
+          "name": "orangehrm_logo",
+          "strategy": "css",
+          "value": ".orangehrm-logo",
+          "description": "OrangeHRM logo element"
+        },
+        {
+          "name": "logo_image",
+          "strategy": "css",
+          "value": "img[alt='orangehrm']",
+          "description": "OrangeHRM logo image"
+        },
+        {
+          "name": "login_page_container",
+          "strategy": "css",
+          "value": ".orangehrm-login-layout",
+          "description": "Login page container to verify page load"
+        },
+        {
+          "name": "dashboard_container",
+          "strategy": "css",
+          "value": ".oxd-layout",
+          "description": "Dashboard page container"
+        },
+        {
+          "name": "username_label",
+          "strategy": "css",
+          "value": "label[for='txtUsername']",
+          "description": "Username field label"
+        },
+        {
+          "name": "password_label",
+          "strategy": "css",
+          "value": "label[for='txtPassword']",
+          "description": "Password field label"
         }
       ],
       "methods": [
         "get_current_url()",
+        "get_dashboard_header_text()",
         "get_error_message_text()",
-        "get_password_error_message_text()",
-        "get_username_error_message_text()",
+        "get_login_button_text()",
+        "get_password_error_text()",
+        "get_password_validation_error_text()",
+        "get_username_error_text()",
+        "get_username_validation_error_text()",
+        "is_dashboard_container_visible()",
+        "is_dashboard_header_visible()",
         "is_error_message_visible()",
         "is_login_button_visible()",
+        "is_login_page_title_visible()",
+        "is_logo_image_visible()",
         "is_orangehrm_logo_visible()",
-        "is_password_error_message_visible()",
+        "is_password_error_visible()",
         "is_password_input_visible()",
-        "is_username_error_message_visible()",
+        "is_password_label_visible()",
+        "is_password_validation_error_visible()",
+        "is_username_error_visible()",
         "is_username_input_visible()",
+        "is_username_label_visible()",
+        "is_username_validation_error_visible()",
         "login(username, password)",
         "navigate()"
       ]
@@ -117,7 +151,7 @@
       "title": "Verify successful login with valid credentials",
       "test_type": "Positive",
       "priority": "High",
-      "page_object": "Login",
+      "page_object": "LoginPage",
       "target_url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
       "locators": [
         {
@@ -136,13 +170,13 @@
           "name": "login_button",
           "strategy": "css",
           "value": "button[type='submit']",
-          "description": "Login button"
+          "description": "Login submit button"
         },
         {
-          "name": "username_navbar",
+          "name": "dashboard_header",
           "strategy": "css",
-          "value": "div[class='oxd-userdropdown']",
-          "description": "User name in top navigation bar"
+          "value": "h6.oxd-text",
+          "description": "Dashboard page header"
         }
       ],
       "actions": [
@@ -151,42 +185,62 @@
           "action": "navigate",
           "target": "target_url",
           "value": "",
-          "description": "Navigate to the OrangeHRM login page"
+          "description": "Navigate to OrangeHRM login page"
         },
         {
           "step": 2,
-          "action": "fill",
+          "action": "wait",
           "target": "username_input",
-          "value": "Admin",
-          "description": "Enter valid username"
+          "value": "visible",
+          "description": "Wait for username field to be visible"
         },
         {
           "step": 3,
           "action": "fill",
-          "target": "password_input",
-          "value": "admin123",
-          "description": "Enter valid password"
+          "target": "username_input",
+          "value": "Admin",
+          "description": "Enter username in the username field"
         },
         {
           "step": 4,
+          "action": "fill",
+          "target": "password_input",
+          "value": "admin123",
+          "description": "Enter password in the password field"
+        },
+        {
+          "step": 5,
           "action": "click",
           "target": "login_button",
           "value": "",
           "description": "Click the Login button"
+        },
+        {
+          "step": 6,
+          "action": "wait",
+          "target": "dashboard_header",
+          "value": "visible",
+          "description": "Wait for dashboard to load"
         }
       ],
       "assertions": [
         {
           "type": "url_contains",
-          "target": "",
+          "target": "current_url",
           "value": "/dashboard",
-          "description": "User is redirected to the dashboard"
+          "description": "Verify user is redirected to dashboard URL"
         },
         {
           "type": "element_visible",
-          "target": "username_navbar",
+          "target": "dashboard_header",
           "value": "",
-          "description": "User name is visible in the top navigation bar"
+          "description": "Verify dashboard header is visible"
+        },
+        {
+          "type": "text_contains",
+          "target": "dashboard_header",
+          "value": "Dashboard",
+          "description": "Verify Dashboard page title is displayed"
         }
       ],
       "test_data": {
@@ -200,7 +254,7 @@
       "title": "Verify login fails with invalid username",
       "test_type": "Negative",
       "priority": "High",
-      "page_object": "Login",
+      "page_object": "LoginPage",
       "target_url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
       "locators": [
         {
@@ -219,7 +273,13 @@
           "name": "login_button",
           "strategy": "css",
           "value": "button[type='submit']",
-          "description": "Login button"
+          "description": "Login submit button"
+        },
+        {
+          "name": "error_message",
+          "strategy": "css",
+          "value": ".oxd-alert-content-text",
+          "description": "Error message displayed on login failure"
         }
       ],
       "actions": [
@@ -228,42 +288,62 @@
           "action": "navigate",
           "target": "target_url",
           "value": "",
-          "description": "Navigate to the OrangeHRM login page"
+          "description": "Navigate to OrangeHRM login page"
         },
         {
           "step": 2,
-          "action": "fill",
+          "action": "wait",
           "target": "username_input",
-          "value": "invaliduser",
-          "description": "Enter invalid username"
+          "value": "visible",
+          "description": "Wait for username field to be visible"
         },
         {
           "step": 3,
           "action": "fill",
-          "target": "password_input",
-          "value": "admin123",
-          "description": "Enter valid password"
+          "target": "username_input",
+          "value": "invaliduser",
+          "description": "Enter invalid username in the username field"
         },
         {
           "step": 4,
+          "action": "fill",
+          "target": "password_input",
+          "value": "admin123",
+          "description": "Enter password in the password field"
+        },
+        {
+          "step": 5,
           "action": "click",
           "target": "login_button",
           "value": "",
           "description": "Click the Login button"
+        },
+        {
+          "step": 6,
+          "action": "wait",
+          "target": "error_message",
+          "value": "visible",
+          "description": "Wait for error message to be visible"
         }
       ],
       "assertions": [
         {
-          "type": "not_url_contains",
-          "target": "",
-          "value": "/dashboard",
-          "description": "URL does not contain /dashboard"
+          "type": "url_contains",
+          "target": "current_url",
+          "value": "/auth/login",
+          "description": "Verify user remains on login page"
         },
         {
           "type": "element_visible",
-          "target": "username_input",
+          "target": "error_message",
           "value": "",
-          "description": "User remains on the login page"
+          "description": "Verify error message is displayed"
+        },
+        {
+          "type": "text_contains",
+          "target": "error_message",
+          "value": "Invalid credentials",
+          "description": "Verify error message contains credential failure text"
         }
       ],
       "test_data": {
@@ -277,7 +357,7 @@
       "title": "Verify login fails with incorrect password",
       "test_type": "Negative",
       "priority": "High",
-      "page_object": "Login",
+      "page_object": "LoginPage",
       "target_url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
       "locators": [
         {
@@ -296,7 +376,13 @@
           "name": "login_button",
           "strategy": "css",
           "value": "button[type='submit']",
-          "description": "Login button"
+          "description": "Login submit button"
+        },
+        {
+          "name": "error_message",
+          "strategy": "css",
+          "value": ".oxd-alert-content-text",
+          "description": "Error message displayed on login failure"
         }
       ],
       "actions": [
@@ -305,42 +391,62 @@
           "action": "navigate",
           "target": "target_url",
           "value": "",
-          "description": "Navigate to the OrangeHRM login page"
+          "description": "Navigate to OrangeHRM login page"
         },
         {
           "step": 2,
-          "action": "fill",
+          "action": "wait",
           "target": "username_input",
-          "value": "Admin",
-          "description": "Enter valid username"
+          "value": "visible",
+          "description": "Wait for username field to be visible"
         },
         {
           "step": 3,
           "action": "fill",
-          "target": "password_input",
-          "value": "wrongpassword",
-          "description": "Enter invalid password"
+          "target": "username_input",
+          "value": "Admin",
+          "description": "Enter username in the username field"
         },
         {
           "step": 4,
+          "action": "fill",
+          "target": "password_input",
+          "value": "wrongpassword",
+          "description": "Enter incorrect password in the password field"
+        },
+        {
+          "step": 5,
           "action": "click",
           "target": "login_button",
           "value": "",
           "description": "Click the Login button"
+        },
+        {
+          "step": 6,
+          "action": "wait",
+          "target": "error_message",
+          "value": "visible",
+          "description": "Wait for error message to be visible"
         }
       ],
       "assertions": [
         {
-          "type": "not_url_contains",
-          "target": "",
-          "value": "/dashboard",
-          "description": "URL does not contain /dashboard"
+          "type": "url_contains",
+          "target": "current_url",
+          "value": "/auth/login",
+          "description": "Verify user remains on login page"
         },
         {
           "type": "element_visible",
-          "target": "username_input",
+          "target": "error_message",
           "value": "",
-          "description": "User remains on the login page"
+          "description": "Verify error message is displayed"
+        },
+        {
+          "type": "text_contains",
+          "target": "error_message",
+          "value": "Invalid credentials",
+          "description": "Verify error message contains credential failure text"
         }
       ],
       "test_data": {
@@ -351,10 +457,10 @@
     {
       "tc_id": "TC_001_004",
       "ac_id": "AC_001",
-      "title": "Verify login fails with empty username",
+      "title": "Verify login fails with empty username field",
       "test_type": "Boundary",
       "priority": "High",
-      "page_object": "Login",
+      "page_object": "LoginPage",
       "target_url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
       "locators": [
         {
@@ -373,7 +479,19 @@
           "name": "login_button",
           "strategy": "css",
           "value": "button[type='submit']",
-          "description": "Login button"
+          "description": "Login submit button"
+        },
+        {
+          "name": "error_message",
+          "strategy": "css",
+          "value": ".oxd-alert-content-text",
+          "description": "Error message displayed on login failure"
+        },
+        {
+          "name": "username_error",
+          "strategy": "css",
+          "value": ".oxd-input-field-error",
+          "description": "Username field validation error message"
         }
       ],
       "actions": [
@@ -382,42 +500,55 @@
           "action": "navigate",
           "target": "target_url",
           "value": "",
-          "description": "Navigate to the OrangeHRM login page"
+          "description": "Navigate to OrangeHRM login page"
         },
         {
           "step": 2,
-          "action": "clear",
+          "action": "wait",
           "target": "username_input",
-          "value": "",
-          "description": "Clear username field"
+          "value": "visible",
+          "description": "Wait for username field to be visible"
         },
         {
           "step": 3,
           "action": "fill",
           "target": "password_input",
           "value": "admin123",
-          "description": "Enter valid password"
+          "description": "Enter password in the password field"
         },
         {
           "step": 4,
           "action": "click",
           "target": "login_button",
           "value": "",
-          "description": "Click the Login button"
+          "description": "Click the Login button with empty username"
+        },
+        {
+          "step": 5,
+          "action": "wait",
+          "target": "username_error",
+          "value": "visible",
+          "description": "Wait for validation error message to be visible"
         }
       ],
       "assertions": [
         {
-          "type": "not_url_contains",
-          "target": "",
-          "value": "/dashboard",
-          "description": "URL does not contain /dashboard"
+          "type": "url_contains",
+          "target": "current_url",
+          "value": "/auth/login",
+          "description": "Verify user remains on login page"
         },
         {
           "type": "element_visible",
-          "target": "username_input",
+          "target": "username_error",
           "value": "",
-          "description": "User remains on the login page"
+          "description": "Verify validation error message is displayed"
+        },
+        {
+          "type": "text_contains",
+          "target": "username_error",
+          "value": "Required",
+          "description": "Verify error message indicates required field"
         }
       ],
       "test_data": {
@@ -428,475 +559,7 @@
     {
       "tc_id": "TC_001_005",
       "ac_id": "AC_001",
-      "title": "Verify login fails with whitespace username",
-      "test_type": "Boundary",
-      "priority": "High",
-      "page_object": "Login",
-      "target_url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
-      "locators": [
-        {
-          "name": "username_input",
-          "strategy": "name",
-          "value": "username",
-          "description": "Username input field"
-        },
-        {
-          "name": "password_input",
-          "strategy": "name",
-          "value": "password",
-          "description": "Password input field"
-        },
-        {
-          "name": "login_button",
-          "strategy": "css",
-          "value": "button[type='submit']",
-          "description": "Login button"
-        }
-      ],
-      "actions": [
-        {
-          "step": 1,
-          "action": "navigate",
-          "target": "target_url",
-          "value": "",
-          "description": "Navigate to the OrangeHRM login page"
-        },
-        {
-          "step": 2,
-          "action": "fill",
-          "target": "username_input",
-          "value": "(whitespace)",
-          "description": "Enter whitespace in username field"
-        },
-        {
-          "step": 3,
-          "action": "fill",
-          "target": "password_input",
-          "value": "admin123",
-          "description": "Enter valid password"
-        },
-        {
-          "step": 4,
-          "action": "click",
-          "target": "login_button",
-          "value": "",
-          "description": "Click the Login button"
-        }
-      ],
-      "assertions": [
-        {
-          "type": "not_url_contains",
-          "target": "",
-          "value": "/dashboard",
-          "description": "URL does not contain /dashboard"
-        },
-        {
-          "type": "element_visible",
-          "target": "username_input",
-          "value": "",
-          "description": "User remains on the login page"
-        }
-      ],
-      "test_data": {
-        "username": "(whitespace)",
-        "password": "admin123"
-      }
-    },
-    {
-      "tc_id": "TC_001_006",
-      "ac_id": "AC_001",
-      "title": "Verify login fails with empty password",
-      "test_type": "Boundary",
-      "priority": "High",
-      "page_object": "Login",
-      "target_url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
-      "locators": [
-        {
-          "name": "username_input",
-          "strategy": "name",
-          "value": "username",
-          "description": "Username input field"
-        },
-        {
-          "name": "password_input",
-          "strategy": "name",
-          "value": "password",
-          "description": "Password input field"
-        },
-        {
-          "name": "login_button",
-          "strategy": "css",
-          "value": "button[type='submit']",
-          "description": "Login button"
-        }
-      ],
-      "actions": [
-        {
-          "step": 1,
-          "action": "navigate",
-          "target": "target_url",
-          "value": "",
-          "description": "Navigate to the OrangeHRM login page"
-        },
-        {
-          "step": 2,
-          "action": "fill",
-          "target": "username_input",
-          "value": "Admin",
-          "description": "Enter valid username"
-        },
-        {
-          "step": 3,
-          "action": "clear",
-          "target": "password_input",
-          "value": "",
-          "description": "Leave password field empty"
-        },
-        {
-          "step": 4,
-          "action": "click",
-          "target": "login_button",
-          "value": "",
-          "description": "Click the Login button"
-        }
-      ],
-      "assertions": [
-        {
-          "type": "not_url_contains",
-          "target": "",
-          "value": "/dashboard",
-          "description": "URL does not contain /dashboard"
-        },
-        {
-          "type": "element_visible",
-          "target": "username_input",
-          "value": "",
-          "description": "User remains on the login page"
-        }
-      ],
-      "test_data": {
-        "username": "Admin",
-        "password": ""
-      }
-    },
-    {
-      "tc_id": "TC_001_007",
-      "ac_id": "AC_001",
-      "title": "Verify login fails with whitespace password",
-      "test_type": "Boundary",
-      "priority": "High",
-      "page_object": "Login",
-      "target_url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
-      "locators": [
-        {
-          "name": "username_input",
-          "strategy": "name",
-          "value": "username",
-          "description": "Username input field"
-        },
-        {
-          "name": "password_input",
-          "strategy": "name",
-          "value": "password",
-          "description": "Password input field"
-        },
-        {
-          "name": "login_button",
-          "strategy": "css",
-          "value": "button[type='submit']",
-          "description": "Login button"
-        }
-      ],
-      "actions": [
-        {
-          "step": 1,
-          "action": "navigate",
-          "target": "target_url",
-          "value": "",
-          "description": "Navigate to the OrangeHRM login page"
-        },
-        {
-          "step": 2,
-          "action": "fill",
-          "target": "username_input",
-          "value": "Admin",
-          "description": "Enter valid username"
-        },
-        {
-          "step": 3,
-          "action": "fill",
-          "target": "password_input",
-          "value": "(whitespace)",
-          "description": "Enter whitespace in password field"
-        },
-        {
-          "step": 4,
-          "action": "click",
-          "target": "login_button",
-          "value": "",
-          "description": "Click the Login button"
-        }
-      ],
-      "assertions": [
-        {
-          "type": "not_url_contains",
-          "target": "",
-          "value": "/dashboard",
-          "description": "URL does not contain /dashboard"
-        },
-        {
-          "type": "element_visible",
-          "target": "username_input",
-          "value": "",
-          "description": "User remains on the login page"
-        }
-      ],
-      "test_data": {
-        "username": "Admin",
-        "password": "(whitespace)"
-      }
-    },
-    {
-      "tc_id": "TC_002_001",
-      "ac_id": "AC_002",
-      "title": "Verify successful login with valid credentials",
-      "test_type": "Positive",
-      "priority": "High",
-      "page_object": "Login",
-      "target_url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
-      "locators": [
-        {
-          "name": "username_input",
-          "strategy": "name",
-          "value": "username",
-          "description": "Username input field"
-        },
-        {
-          "name": "password_input",
-          "strategy": "name",
-          "value": "password",
-          "description": "Password input field"
-        },
-        {
-          "name": "login_button",
-          "strategy": "css",
-          "value": "button[type='submit']",
-          "description": "Login button"
-        }
-      ],
-      "actions": [
-        {
-          "step": 1,
-          "action": "navigate",
-          "target": "target_url",
-          "value": "",
-          "description": "Navigate to the OrangeHRM login page"
-        },
-        {
-          "step": 2,
-          "action": "fill",
-          "target": "username_input",
-          "value": "Admin",
-          "description": "Enter valid username"
-        },
-        {
-          "step": 3,
-          "action": "fill",
-          "target": "password_input",
-          "value": "admin123",
-          "description": "Enter valid password"
-        },
-        {
-          "step": 4,
-          "action": "click",
-          "target": "login_button",
-          "value": "",
-          "description": "Click the Login button"
-        }
-      ],
-      "assertions": [
-        {
-          "type": "url_contains",
-          "target": "",
-          "value": "/dashboard",
-          "description": "URL contains /dashboard"
-        }
-      ],
-      "test_data": {
-        "username": "Admin",
-        "password": "admin123"
-      }
-    },
-    {
-      "tc_id": "TC_002_002",
-      "ac_id": "AC_002",
-      "title": "Verify login fails with invalid username",
-      "test_type": "Negative",
-      "priority": "High",
-      "page_object": "Login",
-      "target_url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
-      "locators": [
-        {
-          "name": "username_input",
-          "strategy": "name",
-          "value": "username",
-          "description": "Username input field"
-        },
-        {
-          "name": "password_input",
-          "strategy": "name",
-          "value": "password",
-          "description": "Password input field"
-        },
-        {
-          "name": "login_button",
-          "strategy": "css",
-          "value": "button[type='submit']",
-          "description": "Login button"
-        },
-        {
-          "name": "error_message",
-          "strategy": "css",
-          "value": "p[class='oxd-text oxd-text--p oxd-alert-content-text']",
-          "description": "Error message container"
-        }
-      ],
-      "actions": [
-        {
-          "step": 1,
-          "action": "navigate",
-          "target": "target_url",
-          "value": "",
-          "description": "Navigate to the OrangeHRM login page"
-        },
-        {
-          "step": 2,
-          "action": "fill",
-          "target": "username_input",
-          "value": "invaliduser",
-          "description": "Enter invalid username"
-        },
-        {
-          "step": 3,
-          "action": "fill",
-          "target": "password_input",
-          "value": "admin123",
-          "description": "Enter valid password"
-        },
-        {
-          "step": 4,
-          "action": "click",
-          "target": "login_button",
-          "value": "",
-          "description": "Click the Login button"
-        }
-      ],
-      "assertions": [
-        {
-          "type": "text_equals",
-          "target": "error_message",
-          "value": "Invalid credentials",
-          "description": "Error message 'Invalid credentials' is displayed"
-        },
-        {
-          "type": "element_visible",
-          "target": "username_input",
-          "value": "",
-          "description": "User remains on the login page"
-        }
-      ],
-      "test_data": {
-        "username": "invaliduser",
-        "password": "admin123"
-      }
-    },
-    {
-      "tc_id": "TC_002_003",
-      "ac_id": "AC_002",
-      "title": "Verify login fails with valid username and incorrect password",
-      "test_type": "Negative",
-      "priority": "High",
-      "page_object": "Login",
-      "target_url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
-      "locators": [
-        {
-          "name": "username_input",
-          "strategy": "name",
-          "value": "username",
-          "description": "Username input field"
-        },
-        {
-          "name": "password_input",
-          "strategy": "name",
-          "value": "password",
-          "description": "Password input field"
-        },
-        {
-          "name": "login_button",
-          "strategy": "css",
-          "value": "button[type='submit']",
-          "description": "Login button"
-        },
-        {
-          "name": "error_message",
-          "strategy": "css",
-          "value": "p[class='oxd-text oxd-text--p oxd-alert-content-text']",
-          "description": "Error message container"
-        }
-      ],
-      "actions": [
-        {
-          "step": 1,
-          "action": "navigate",
-          "target": "target_url",
-          "value": "",
-          "description": "Navigate to the OrangeHRM login page"
-        },
-        {
-          "step": 2,
-          "action": "fill",
-          "target": "username_input",
-          "value": "Admin",
-          "description": "Enter valid username"
-        },
-        {
-          "step": 3,
-          "action": "fill",
-          "target": "password_input",
-          "value": "wrongpassword",
-          "description": "Enter invalid password"
-        },
-        {
-          "step": 4,
-          "action": "click",
-          "target": "login_button",
-          "value": "",
-          "description": "Click the Login button"
-        }
-      ],
-      "assertions": [
-        {
-          "type": "text_equals",
-          "target": "error_message",
-          "value": "Invalid credentials",
-          "description": "Error message 'Invalid credentials' is displayed"
-        },
-        {
-          "type": "element_visible",
-          "target": "username_input",
-          "value": "",
-          "description": "User remains on the login page"
-        }
-      ],
-      "test_data": {
-        "username": "Admin",
-        "password": "wrongpassword"
-      }
-    },
-    {
-      "tc_id": "TC_002_004",
-      "ac_id": "AC_002",
-      "title": "Verify login fails with empty username",
+      "title": "Verify login fails with empty password field",
       "test_type": "Boundary",
       "priority": "High",
       "page_object": "LoginPage",
@@ -906,25 +569,31 @@
           "name": "username_input",
           "strategy": "name",
           "value": "username",
-          "description": "Username input field on login page"
+          "description": "Username input field"
         },
         {
           "name": "password_input",
           "strategy": "name",
           "value": "password",
-          "description": "Password input field on login page"
+          "description": "Password input field"
         },
         {
           "name": "login_button",
-          "strategy": "xpath",
-          "value": "//button[@type='submit']",
+          "strategy": "css",
+          "value": "button[type='submit']",
           "description": "Login submit button"
         },
         {
-          "name": "username_error_message",
-          "strategy": "xpath",
-          "value": "//span[contains(text(), 'Required')]",
-          "description": "Validation error message for empty username field"
+          "name": "error_message",
+          "strategy": "css",
+          "value": ".oxd-alert-content-text",
+          "description": "Error message displayed on login failure"
+        },
+        {
+          "name": "password_error",
+          "strategy": "css",
+          "value": ".oxd-input-field-error",
+          "description": "Password field validation error message"
         }
       ],
       "actions": [
@@ -937,31 +606,134 @@
         },
         {
           "step": 2,
-          "action": "click",
+          "action": "wait",
           "target": "username_input",
-          "value": "",
-          "description": "Click on username input field to focus"
+          "value": "visible",
+          "description": "Wait for username field to be visible"
         },
         {
           "step": 3,
+          "action": "fill",
+          "target": "username_input",
+          "value": "Admin",
+          "description": "Enter username in the username field"
+        },
+        {
+          "step": 4,
           "action": "click",
-          "target": "password_input",
+          "target": "login_button",
           "value": "",
-          "description": "Click on password field to trigger blur event on username"
+          "description": "Click the Login button with empty password"
+        },
+        {
+          "step": 5,
+          "action": "wait",
+          "target": "password_error",
+          "value": "visible",
+          "description": "Wait for validation error message to be visible"
+        }
+      ],
+      "assertions": [
+        {
+          "type": "url_contains",
+          "target": "current_url",
+          "value": "/auth/login",
+          "description": "Verify user remains on login page"
+        },
+        {
+          "type": "element_visible",
+          "target": "password_error",
+          "value": "",
+          "description": "Verify validation error message is displayed"
+        },
+        {
+          "type": "text_contains",
+          "target": "password_error",
+          "value": "Required",
+          "description": "Verify error message indicates required field"
+        }
+      ],
+      "test_data": {
+        "username": "Admin",
+        "password": ""
+      }
+    },
+    {
+      "tc_id": "TC_001_006",
+      "ac_id": "AC_001",
+      "title": "Verify login fails with whitespace-only username",
+      "test_type": "Boundary",
+      "priority": "High",
+      "page_object": "LoginPage",
+      "target_url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
+      "locators": [
+        {
+          "name": "username_input",
+          "strategy": "name",
+          "value": "username",
+          "description": "Username input field"
+        },
+        {
+          "name": "password_input",
+          "strategy": "name",
+          "value": "password",
+          "description": "Password input field"
+        },
+        {
+          "name": "login_button",
+          "strategy": "css",
+          "value": "button[type='submit']",
+          "description": "Login submit button"
+        },
+        {
+          "name": "error_message",
+          "strategy": "css",
+          "value": ".oxd-alert-content-text",
+          "description": "Error message displayed on login failure"
+        }
+      ],
+      "actions": [
+        {
+          "step": 1,
+          "action": "navigate",
+          "target": "target_url",
+          "value": "",
+          "description": "Navigate to OrangeHRM login page"
+        },
+        {
+          "step": 2,
+          "action": "wait",
+          "target": "username_input",
+          "value": "visible",
+          "description": "Wait for username field to be visible"
+        },
+        {
+          "step": 3,
+          "action": "fill",
+          "target": "username_input",
+          "value": "(whitespace)",
+          "description": "Enter whitespace only in the username field"
         },
         {
           "step": 4,
           "action": "fill",
           "target": "password_input",
           "value": "admin123",
-          "description": "Enter valid password in password field"
+          "description": "Enter password in the password field"
         },
         {
           "step": 5,
           "action": "click",
           "target": "login_button",
           "value": "",
-          "description": "Click the Login button to attempt login"
+          "description": "Click the Login button"
+        },
+        {
+          "step": 6,
+          "action": "wait",
+          "target": "error_message",
+          "value": "visible",
+          "description": "Wait for error message to be visible"
         }
       ],
       "assertions": [
@@ -969,108 +741,19 @@
           "type": "url_contains",
           "target": "current_url",
           "value": "/auth/login",
-          "description": "User remains on login page after failed login attempt"
+          "description": "Verify user remains on login page"
         },
         {
           "type": "element_visible",
-          "target": "username_error_message",
+          "target": "error_message",
           "value": "",
-          "description": "Validation error message is displayed for empty username field"
+          "description": "Verify error message is displayed"
         },
         {
           "type": "text_contains",
-          "target": "username_error_message",
-          "value": "Required",
-          "description": "Error message contains 'Required' text indicating mandatory field validation"
-        }
-      ],
-      "test_data": {
-        "username": "",
-        "password": "admin123"
-      }
-    },
-    {
-      "tc_id": "TC_002_005",
-      "ac_id": "AC_002",
-      "title": "Verify login fails with whitespace username",
-      "test_type": "Boundary",
-      "priority": "High",
-      "page_object": "LoginPage",
-      "target_url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
-      "locators": [
-        {
-          "name": "username_input",
-          "strategy": "name",
-          "value": "username",
-          "description": "Username input field on login page"
-        },
-        {
-          "name": "password_input",
-          "strategy": "name",
-          "value": "password",
-          "description": "Password input field on login page"
-        },
-        {
-          "name": "login_button",
-          "strategy": "xpath",
-          "value": "//button[@type='submit']",
-          "description": "Login submit button"
-        },
-        {
-          "name": "username_error_message",
-          "strategy": "xpath",
-          "value": "//span[contains(text(), 'Required')]",
-          "description": "Validation error message for invalid username field"
-        }
-      ],
-      "actions": [
-        {
-          "step": 1,
-          "action": "navigate",
-          "target": "target_url",
-          "value": "",
-          "description": "Navigate to OrangeHRM login page"
-        },
-        {
-          "step": 2,
-          "action": "fill",
-          "target": "username_input",
-          "value": "(whitespace)",
-          "description": "Enter whitespace in username field"
-        },
-        {
-          "step": 3,
-          "action": "fill",
-          "target": "password_input",
-          "value": "admin123",
-          "description": "Enter valid password in password field"
-        },
-        {
-          "step": 4,
-          "action": "click",
-          "target": "login_button",
-          "value": "",
-          "description": "Click the Login button to attempt login"
-        }
-      ],
-      "assertions": [
-        {
-          "type": "url_contains",
-          "target": "current_url",
-          "value": "/auth/login",
-          "description": "User remains on login page after failed login attempt"
-        },
-        {
-          "type": "element_visible",
-          "target": "username_error_message",
-          "value": "",
-          "description": "Validation error message is displayed for invalid username"
-        },
-        {
-          "type": "text_contains",
-          "target": "username_error_message",
-          "value": "Required",
-          "description": "Error message indicates validation failure for whitespace username"
+          "target": "error_message",
+          "value": "Invalid credentials",
+          "description": "Verify error message indicates invalid credentials"
         }
       ],
       "test_data": {
@@ -1079,9 +762,9 @@
       }
     },
     {
-      "tc_id": "TC_002_006",
-      "ac_id": "AC_002",
-      "title": "Verify login fails with empty password",
+      "tc_id": "TC_001_007",
+      "ac_id": "AC_001",
+      "title": "Verify login fails with whitespace-only password",
       "test_type": "Boundary",
       "priority": "High",
       "page_object": "LoginPage",
@@ -1091,25 +774,25 @@
           "name": "username_input",
           "strategy": "name",
           "value": "username",
-          "description": "Username input field on login page"
+          "description": "Username input field"
         },
         {
           "name": "password_input",
           "strategy": "name",
           "value": "password",
-          "description": "Password input field on login page"
+          "description": "Password input field"
         },
         {
           "name": "login_button",
-          "strategy": "xpath",
-          "value": "//button[@type='submit']",
+          "strategy": "css",
+          "value": "button[type='submit']",
           "description": "Login submit button"
         },
         {
-          "name": "password_error_message",
-          "strategy": "xpath",
-          "value": "//span[contains(text(), 'Required')]",
-          "description": "Validation error message for empty password field"
+          "name": "error_message",
+          "strategy": "css",
+          "value": ".oxd-alert-content-text",
+          "description": "Error message displayed on login failure"
         }
       ],
       "actions": [
@@ -1122,113 +805,38 @@
         },
         {
           "step": 2,
-          "action": "fill",
+          "action": "wait",
           "target": "username_input",
-          "value": "Admin",
-          "description": "Enter valid username in username field"
+          "value": "visible",
+          "description": "Wait for username field to be visible"
         },
         {
           "step": 3,
-          "action": "click",
-          "target": "password_input",
-          "value": "",
-          "description": "Click on password field but leave it empty"
+          "action": "fill",
+          "target": "username_input",
+          "value": "Admin",
+          "description": "Enter username in the username field"
         },
         {
           "step": 4,
-          "action": "click",
-          "target": "login_button",
-          "value": "",
-          "description": "Click the Login button to attempt login"
-        }
-      ],
-      "assertions": [
-        {
-          "type": "url_contains",
-          "target": "current_url",
-          "value": "/auth/login",
-          "description": "User remains on login page after failed login attempt"
-        },
-        {
-          "type": "element_visible",
-          "target": "password_error_message",
-          "value": "",
-          "description": "Validation error message is displayed for empty password field"
-        },
-        {
-          "type": "text_contains",
-          "target": "password_error_message",
-          "value": "Required",
-          "description": "Error message contains 'Required' text indicating mandatory field validation"
-        }
-      ],
-      "test_data": {
-        "username": "Admin",
-        "password": ""
-      }
-    },
-    {
-      "tc_id": "TC_002_007",
-      "ac_id": "AC_002",
-      "title": "Verify login fails with whitespace password",
-      "test_type": "Boundary",
-      "priority": "High",
-      "page_object": "LoginPage",
-      "target_url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
-      "locators": [
-        {
-          "name": "username_input",
-          "strategy": "name",
-          "value": "username",
-          "description": "Username input field on login page"
-        },
-        {
-          "name": "password_input",
-          "strategy": "name",
-          "value": "password",
-          "description": "Password input field on login page"
-        },
-        {
-          "name": "login_button",
-          "strategy": "xpath",
-          "value": "//button[@type='submit']",
-          "description": "Login submit button"
-        },
-        {
-          "name": "password_error_message",
-          "strategy": "xpath",
-          "value": "//span[contains(text(), 'Required')]",
-          "description": "Validation error message for invalid password field"
-        }
-      ],
-      "actions": [
-        {
-          "step": 1,
-          "action": "navigate",
-          "target": "target_url",
-          "value": "",
-          "description": "Navigate to OrangeHRM login page"
-        },
-        {
-          "step": 2,
-          "action": "fill",
-          "target": "username_input",
-          "value": "Admin",
-          "description": "Enter valid username in username field"
-        },
-        {
-          "step": 3,
           "action": "fill",
           "target": "password_input",
           "value": "(whitespace)",
-          "description": "Enter whitespace in password field"
+          "description": "Enter whitespace only in the password field"
         },
         {
-          "step": 4,
+          "step": 5,
           "action": "click",
           "target": "login_button",
           "value": "",
-          "description": "Click the Login button to attempt login"
+          "description": "Click the Login button"
+        },
+        {
+          "step": 6,
+          "action": "wait",
+          "target": "error_message",
+          "value": "visible",
+          "description": "Wait for error message to be visible"
         }
       ],
       "assertions": [
@@ -1236,19 +844,19 @@
           "type": "url_contains",
           "target": "current_url",
           "value": "/auth/login",
-          "description": "User remains on login page after failed login attempt"
+          "description": "Verify user remains on login page"
         },
         {
           "type": "element_visible",
-          "target": "password_error_message",
+          "target": "error_message",
           "value": "",
-          "description": "Validation error message is displayed for invalid password"
+          "description": "Verify error message is displayed"
         },
         {
           "type": "text_contains",
-          "target": "password_error_message",
-          "value": "Required",
-          "description": "Error message indicates validation failure for whitespace password"
+          "target": "error_message",
+          "value": "Invalid credentials",
+          "description": "Verify error message indicates invalid credentials"
         }
       ],
       "test_data": {
@@ -1257,301 +865,9 @@
       }
     },
     {
-      "tc_id": "TC_002_008",
+      "tc_id": "TC_001_008",
       "ac_id": "AC_002",
-      "title": "Verify login fails with empty username and password",
-      "test_type": "Boundary",
-      "priority": "High",
-      "page_object": "LoginPage",
-      "target_url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
-      "locators": [
-        {
-          "name": "username_input",
-          "strategy": "name",
-          "value": "username",
-          "description": "Username input field on login page"
-        },
-        {
-          "name": "password_input",
-          "strategy": "name",
-          "value": "password",
-          "description": "Password input field on login page"
-        },
-        {
-          "name": "login_button",
-          "strategy": "xpath",
-          "value": "//button[@type='submit']",
-          "description": "Login submit button"
-        },
-        {
-          "name": "username_error_message",
-          "strategy": "xpath",
-          "value": "//span[contains(text(), 'Required')]",
-          "description": "Validation error message for empty username field"
-        },
-        {
-          "name": "password_error_message",
-          "strategy": "xpath",
-          "value": "//span[contains(text(), 'Required')]",
-          "description": "Validation error message for empty password field"
-        }
-      ],
-      "actions": [
-        {
-          "step": 1,
-          "action": "navigate",
-          "target": "target_url",
-          "value": "",
-          "description": "Navigate to OrangeHRM login page"
-        },
-        {
-          "step": 2,
-          "action": "click",
-          "target": "username_input",
-          "value": "",
-          "description": "Click on username input field to focus"
-        },
-        {
-          "step": 3,
-          "action": "click",
-          "target": "password_input",
-          "value": "",
-          "description": "Click on password field without entering any data"
-        },
-        {
-          "step": 4,
-          "action": "click",
-          "target": "login_button",
-          "value": "",
-          "description": "Click the Login button to attempt login"
-        }
-      ],
-      "assertions": [
-        {
-          "type": "url_contains",
-          "target": "current_url",
-          "value": "/auth/login",
-          "description": "User remains on login page after failed login attempt"
-        },
-        {
-          "type": "element_visible",
-          "target": "username_error_message",
-          "value": "",
-          "description": "Validation error message is displayed for empty username field"
-        },
-        {
-          "type": "element_visible",
-          "target": "password_error_message",
-          "value": "",
-          "description": "Validation error message is displayed for empty password field"
-        },
-        {
-          "type": "text_contains",
-          "target": "username_error_message",
-          "value": "Required",
-          "description": "Username error message contains 'Required' text"
-        },
-        {
-          "type": "text_contains",
-          "target": "password_error_message",
-          "value": "Required",
-          "description": "Password error message contains 'Required' text"
-        }
-      ],
-      "test_data": {
-        "username": "",
-        "password": ""
-      }
-    },
-    {
-      "tc_id": "TC_003_001",
-      "ac_id": "AC_003",
-      "title": "Verify login page elements visibility",
-      "test_type": "UI",
-      "priority": "High",
-      "page_object": "LoginPage",
-      "target_url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
-      "locators": [
-        {
-          "name": "username_input",
-          "strategy": "name",
-          "value": "username",
-          "description": "Username input field on login page"
-        },
-        {
-          "name": "password_input",
-          "strategy": "name",
-          "value": "password",
-          "description": "Password input field on login page"
-        },
-        {
-          "name": "login_button",
-          "strategy": "xpath",
-          "value": "//button[@type='submit']",
-          "description": "Login submit button"
-        },
-        {
-          "name": "orangehrm_logo",
-          "strategy": "xpath",
-          "value": "//div[@class='orangehrm-login-logo']//img",
-          "description": "OrangeHRM logo image on login page"
-        }
-      ],
-      "actions": [
-        {
-          "step": 1,
-          "action": "navigate",
-          "target": "target_url",
-          "value": "",
-          "description": "Navigate to OrangeHRM login page"
-        }
-      ],
-      "assertions": [
-        {
-          "type": "element_visible",
-          "target": "username_input",
-          "value": "",
-          "description": "Username input field is visible on the login page"
-        },
-        {
-          "type": "element_visible",
-          "target": "password_input",
-          "value": "",
-          "description": "Password input field is visible on the login page"
-        },
-        {
-          "type": "element_visible",
-          "target": "login_button",
-          "value": "",
-          "description": "Login button is visible on the login page"
-        },
-        {
-          "type": "element_visible",
-          "target": "orangehrm_logo",
-          "value": "",
-          "description": "OrangeHRM logo is visible on the login page"
-        }
-      ],
-      "test_data": {}
-    },
-    {
-      "tc_id": "TC_003_002",
-      "ac_id": "AC_003",
-      "title": "Verify username input field functionality",
-      "test_type": "UI",
-      "priority": "High",
-      "page_object": "LoginPage",
-      "target_url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
-      "locators": [
-        {
-          "name": "username_input",
-          "strategy": "name",
-          "value": "username",
-          "description": "Username input field on login page"
-        }
-      ],
-      "actions": [
-        {
-          "step": 1,
-          "action": "navigate",
-          "target": "target_url",
-          "value": "",
-          "description": "Navigate to OrangeHRM login page"
-        },
-        {
-          "step": 2,
-          "action": "fill",
-          "target": "username_input",
-          "value": "testusername",
-          "description": "Enter text in the username input field"
-        },
-        {
-          "step": 3,
-          "action": "get_attr",
-          "target": "username_input",
-          "value": "value",
-          "description": "Get the value attribute of the username input field"
-        }
-      ],
-      "assertions": [
-        {
-          "type": "element_visible",
-          "target": "username_input",
-          "value": "",
-          "description": "Username input field is visible on the login page"
-        },
-        {
-          "type": "attr_equals",
-          "target": "username_input",
-          "value": "testusername",
-          "description": "Username input field contains the entered text 'testusername'"
-        }
-      ],
-      "test_data": {
-        "username": "testusername"
-      }
-    },
-    {
-      "tc_id": "TC_003_003",
-      "ac_id": "AC_003",
-      "title": "Verify password input field masking",
-      "test_type": "UI",
-      "priority": "High",
-      "page_object": "LoginPage",
-      "target_url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
-      "locators": [
-        {
-          "name": "password_input",
-          "strategy": "name",
-          "value": "password",
-          "description": "Password input field on login page"
-        }
-      ],
-      "actions": [
-        {
-          "step": 1,
-          "action": "navigate",
-          "target": "target_url",
-          "value": "",
-          "description": "Navigate to OrangeHRM login page"
-        },
-        {
-          "step": 2,
-          "action": "fill",
-          "target": "password_input",
-          "value": "testpassword",
-          "description": "Enter text in the password input field"
-        },
-        {
-          "step": 3,
-          "action": "get_attr",
-          "target": "password_input",
-          "value": "type",
-          "description": "Get the type attribute of the password input field"
-        }
-      ],
-      "assertions": [
-        {
-          "type": "element_visible",
-          "target": "password_input",
-          "value": "",
-          "description": "Password input field is visible on the login page"
-        },
-        {
-          "type": "attr_equals",
-          "target": "password_input",
-          "value": "password",
-          "description": "Password input field has type attribute set to 'password' for character masking"
-        }
-      ],
-      "test_data": {
-        "password": "testpassword"
-      }
-    },
-    {
-      "tc_id": "TC_003_004",
-      "ac_id": "AC_003",
-      "title": "Verify Login button functionality",
+      "title": "Verify successful redirect to dashboard with valid credentials",
       "test_type": "Positive",
       "priority": "High",
       "page_object": "LoginPage",
@@ -1561,19 +877,31 @@
           "name": "username_input",
           "strategy": "name",
           "value": "username",
-          "description": "Username input field on login page"
+          "description": "Username input field"
         },
         {
           "name": "password_input",
           "strategy": "name",
           "value": "password",
-          "description": "Password input field on login page"
+          "description": "Password input field"
         },
         {
           "name": "login_button",
-          "strategy": "xpath",
-          "value": "//button[@type='submit']",
+          "strategy": "css",
+          "value": "button[type='submit']",
           "description": "Login submit button"
+        },
+        {
+          "name": "dashboard_header",
+          "strategy": "css",
+          "value": "h6.oxd-text",
+          "description": "Dashboard page header"
+        },
+        {
+          "name": "error_message",
+          "strategy": "css",
+          "value": ".oxd-alert-content-text",
+          "description": "Error message element"
         }
       ],
       "actions": [
@@ -1586,24 +914,38 @@
         },
         {
           "step": 2,
-          "action": "fill",
+          "action": "wait",
           "target": "username_input",
-          "value": "Admin",
-          "description": "Enter valid username in username field"
+          "value": "visible",
+          "description": "Wait for username field to be visible"
         },
         {
           "step": 3,
           "action": "fill",
-          "target": "password_input",
-          "value": "admin123",
-          "description": "Enter valid password in password field"
+          "target": "username_input",
+          "value": "Admin",
+          "description": "Enter username in the username field"
         },
         {
           "step": 4,
+          "action": "fill",
+          "target": "password_input",
+          "value": "admin123",
+          "description": "Enter password in the password field"
+        },
+        {
+          "step": 5,
           "action": "click",
           "target": "login_button",
           "value": "",
-          "description": "Click the Login button to submit the form"
+          "description": "Click the Login button"
+        },
+        {
+          "step": 6,
+          "action": "wait",
+          "target": "dashboard_header",
+          "value": "visible",
+          "description": "Wait for dashboard header to be visible"
         }
       ],
       "assertions": [
@@ -1611,13 +953,25 @@
           "type": "url_contains",
           "target": "current_url",
           "value": "/dashboard",
-          "description": "User is redirected to the dashboard after successful login"
+          "description": "Verify user is redirected to dashboard URL"
+        },
+        {
+          "type": "element_visible",
+          "target": "dashboard_header",
+          "value": "",
+          "description": "Verify dashboard header is visible"
+        },
+        {
+          "type": "element_hidden",
+          "target": "error_message",
+          "value": "",
+          "description": "Verify no error message is displayed"
         },
         {
           "type": "not_url_contains",
           "target": "current_url",
           "value": "/auth/login",
-          "description": "User is no longer on the login page"
+          "description": "Verify user is no longer on login page"
         }
       ],
       "test_data": {
@@ -1626,9 +980,9 @@
       }
     },
     {
-      "tc_id": "TC_003_005",
-      "ac_id": "AC_003",
-      "title": "Verify error handling for invalid credentials",
+      "tc_id": "TC_001_009",
+      "ac_id": "AC_002",
+      "title": "Verify 'Invalid credentials' error message with invalid username",
       "test_type": "Negative",
       "priority": "High",
       "page_object": "LoginPage",
@@ -1638,25 +992,25 @@
           "name": "username_input",
           "strategy": "name",
           "value": "username",
-          "description": "Username input field on login page"
+          "description": "Username input field"
         },
         {
           "name": "password_input",
           "strategy": "name",
           "value": "password",
-          "description": "Password input field on login page"
+          "description": "Password input field"
         },
         {
           "name": "login_button",
-          "strategy": "xpath",
-          "value": "//button[@type='submit']",
+          "strategy": "css",
+          "value": "button[type='submit']",
           "description": "Login submit button"
         },
         {
           "name": "error_message",
-          "strategy": "xpath",
-          "value": "//div[@role='alert']",
-          "description": "Error message alert displayed on login failure"
+          "strategy": "css",
+          "value": ".oxd-alert-content-text",
+          "description": "Error message displayed on login failure"
         }
       ],
       "actions": [
@@ -1669,24 +1023,38 @@
         },
         {
           "step": 2,
-          "action": "fill",
+          "action": "wait",
           "target": "username_input",
-          "value": "invaliduser",
-          "description": "Enter invalid username in username field"
+          "value": "visible",
+          "description": "Wait for username field to be visible"
         },
         {
           "step": 3,
           "action": "fill",
-          "target": "password_input",
-          "value": "admin123",
-          "description": "Enter valid password in password field"
+          "target": "username_input",
+          "value": "invaliduser",
+          "description": "Enter invalid username in the username field"
         },
         {
           "step": 4,
+          "action": "fill",
+          "target": "password_input",
+          "value": "admin123",
+          "description": "Enter password in the password field"
+        },
+        {
+          "step": 5,
           "action": "click",
           "target": "login_button",
           "value": "",
-          "description": "Click the Login button to attempt login"
+          "description": "Click the Login button"
+        },
+        {
+          "step": 6,
+          "action": "wait",
+          "target": "error_message",
+          "value": "visible",
+          "description": "Wait for error message to be visible"
         }
       ],
       "assertions": [
@@ -1694,19 +1062,19 @@
           "type": "url_contains",
           "target": "current_url",
           "value": "/auth/login",
-          "description": "User remains on the login page after failed login"
+          "description": "Verify user remains on login page"
         },
         {
           "type": "element_visible",
           "target": "error_message",
           "value": "",
-          "description": "Error message is displayed for invalid credentials"
+          "description": "Verify error message is displayed"
         },
         {
-          "type": "text_contains",
+          "type": "text_equals",
           "target": "error_message",
-          "value": "Invalid",
-          "description": "Error message indicates invalid credentials"
+          "value": "Invalid credentials",
+          "description": "Verify exact error message text is displayed"
         }
       ],
       "test_data": {
@@ -1715,9 +1083,9 @@
       }
     },
     {
-      "tc_id": "TC_003_006",
-      "ac_id": "AC_003",
-      "title": "Verify error handling for valid username and incorrect password",
+      "tc_id": "TC_001_010",
+      "ac_id": "AC_002",
+      "title": "Verify 'Invalid credentials' error message with incorrect password",
       "test_type": "Negative",
       "priority": "High",
       "page_object": "LoginPage",
@@ -1727,25 +1095,25 @@
           "name": "username_input",
           "strategy": "name",
           "value": "username",
-          "description": "Username input field on login page"
+          "description": "Username input field"
         },
         {
           "name": "password_input",
           "strategy": "name",
           "value": "password",
-          "description": "Password input field on login page"
+          "description": "Password input field"
         },
         {
           "name": "login_button",
-          "strategy": "xpath",
-          "value": "//button[@type='submit']",
+          "strategy": "css",
+          "value": "button[type='submit']",
           "description": "Login submit button"
         },
         {
           "name": "error_message",
-          "strategy": "xpath",
-          "value": "//div[@role='alert']",
-          "description": "Error message alert displayed on login failure"
+          "strategy": "css",
+          "value": ".oxd-alert-content-text",
+          "description": "Error message displayed on login failure"
         }
       ],
       "actions": [
@@ -1758,24 +1126,38 @@
         },
         {
           "step": 2,
-          "action": "fill",
+          "action": "wait",
           "target": "username_input",
-          "value": "Admin",
-          "description": "Enter valid username in username field"
+          "value": "visible",
+          "description": "Wait for username field to be visible"
         },
         {
           "step": 3,
           "action": "fill",
-          "target": "password_input",
-          "value": "wrongpassword",
-          "description": "Enter invalid password in password field"
+          "target": "username_input",
+          "value": "Admin",
+          "description": "Enter username in the username field"
         },
         {
           "step": 4,
+          "action": "fill",
+          "target": "password_input",
+          "value": "wrongpassword",
+          "description": "Enter incorrect password in the password field"
+        },
+        {
+          "step": 5,
           "action": "click",
           "target": "login_button",
           "value": "",
-          "description": "Click the Login button to attempt login"
+          "description": "Click the Login button"
+        },
+        {
+          "step": 6,
+          "action": "wait",
+          "target": "error_message",
+          "value": "visible",
+          "description": "Wait for error message to be visible"
         }
       ],
       "assertions": [
@@ -1783,24 +1165,1764 @@
           "type": "url_contains",
           "target": "current_url",
           "value": "/auth/login",
-          "description": "User remains on the login page after failed login"
+          "description": "Verify user remains on login page"
         },
         {
           "type": "element_visible",
           "target": "error_message",
           "value": "",
-          "description": "Error message is displayed for incorrect password"
+          "description": "Verify error message is displayed"
         },
         {
-          "type": "text_contains",
+          "type": "text_equals",
           "target": "error_message",
-          "value": "Invalid",
-          "description": "Error message indicates invalid credentials or authentication failure"
+          "value": "Invalid credentials",
+          "description": "Verify exact error message text is displayed"
         }
       ],
       "test_data": {
         "username": "Admin",
         "password": "wrongpassword"
+      }
+    },
+    {
+      "tc_id": "TC_001_011",
+      "ac_id": "AC_002",
+      "title": "Verify validation feedback with empty username field",
+      "test_type": "Boundary",
+      "priority": "High",
+      "page_object": "LoginPage",
+      "target_url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
+      "locators": [
+        {
+          "name": "username_input",
+          "strategy": "name",
+          "value": "username",
+          "description": "Username input field"
+        },
+        {
+          "name": "password_input",
+          "strategy": "name",
+          "value": "password",
+          "description": "Password input field"
+        },
+        {
+          "name": "login_button",
+          "strategy": "css",
+          "value": "button[type='submit']",
+          "description": "Login submit button"
+        },
+        {
+          "name": "username_validation_error",
+          "strategy": "css",
+          "value": ".oxd-input-field-error",
+          "description": "Username field validation error message"
+        },
+        {
+          "name": "error_alert",
+          "strategy": "css",
+          "value": ".oxd-alert-content-text",
+          "description": "Error alert message"
+        }
+      ],
+      "actions": [
+        {
+          "step": 1,
+          "action": "navigate",
+          "target": "target_url",
+          "value": "",
+          "description": "Navigate to OrangeHRM login page"
+        },
+        {
+          "step": 2,
+          "action": "wait",
+          "target": "username_input",
+          "value": "visible",
+          "description": "Wait for username field to be visible"
+        },
+        {
+          "step": 3,
+          "action": "fill",
+          "target": "password_input",
+          "value": "admin123",
+          "description": "Enter password in the password field"
+        },
+        {
+          "step": 4,
+          "action": "click",
+          "target": "login_button",
+          "value": "",
+          "description": "Click the Login button with empty username"
+        },
+        {
+          "step": 5,
+          "action": "wait",
+          "target": "username_validation_error",
+          "value": "visible",
+          "description": "Wait for validation error to be visible"
+        }
+      ],
+      "assertions": [
+        {
+          "type": "url_contains",
+          "target": "current_url",
+          "value": "/auth/login",
+          "description": "Verify user remains on login page"
+        },
+        {
+          "type": "element_visible",
+          "target": "username_validation_error",
+          "value": "",
+          "description": "Verify validation error message is displayed"
+        },
+        {
+          "type": "text_contains",
+          "target": "username_validation_error",
+          "value": "Required",
+          "description": "Verify validation error indicates required field"
+        }
+      ],
+      "test_data": {
+        "username": "",
+        "password": "admin123"
+      }
+    },
+    {
+      "tc_id": "TC_001_012",
+      "ac_id": "AC_002",
+      "title": "Verify validation feedback with empty password field",
+      "test_type": "Boundary",
+      "priority": "High",
+      "page_object": "LoginPage",
+      "target_url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
+      "locators": [
+        {
+          "name": "username_input",
+          "strategy": "name",
+          "value": "username",
+          "description": "Username input field"
+        },
+        {
+          "name": "password_input",
+          "strategy": "name",
+          "value": "password",
+          "description": "Password input field"
+        },
+        {
+          "name": "login_button",
+          "strategy": "css",
+          "value": "button[type='submit']",
+          "description": "Login submit button"
+        },
+        {
+          "name": "password_validation_error",
+          "strategy": "css",
+          "value": ".oxd-input-field-error",
+          "description": "Password field validation error message"
+        },
+        {
+          "name": "error_alert",
+          "strategy": "css",
+          "value": ".oxd-alert-content-text",
+          "description": "Error alert message"
+        }
+      ],
+      "actions": [
+        {
+          "step": 1,
+          "action": "navigate",
+          "target": "target_url",
+          "value": "",
+          "description": "Navigate to OrangeHRM login page"
+        },
+        {
+          "step": 2,
+          "action": "wait",
+          "target": "username_input",
+          "value": "visible",
+          "description": "Wait for username field to be visible"
+        },
+        {
+          "step": 3,
+          "action": "fill",
+          "target": "username_input",
+          "value": "Admin",
+          "description": "Enter username in the username field"
+        },
+        {
+          "step": 4,
+          "action": "click",
+          "target": "login_button",
+          "value": "",
+          "description": "Click the Login button with empty password"
+        },
+        {
+          "step": 5,
+          "action": "wait",
+          "target": "password_validation_error",
+          "value": "visible",
+          "description": "Wait for validation error to be visible"
+        }
+      ],
+      "assertions": [
+        {
+          "type": "url_contains",
+          "target": "current_url",
+          "value": "/auth/login",
+          "description": "Verify user remains on login page"
+        },
+        {
+          "type": "element_visible",
+          "target": "password_validation_error",
+          "value": "",
+          "description": "Verify validation error message is displayed"
+        },
+        {
+          "type": "text_contains",
+          "target": "password_validation_error",
+          "value": "Required",
+          "description": "Verify validation error indicates required field"
+        }
+      ],
+      "test_data": {
+        "username": "Admin",
+        "password": ""
+      }
+    },
+    {
+      "tc_id": "TC_001_013",
+      "ac_id": "AC_002",
+      "title": "Verify validation feedback with both fields empty",
+      "test_type": "Boundary",
+      "priority": "High",
+      "page_object": "LoginPage",
+      "target_url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
+      "locators": [
+        {
+          "name": "username_input",
+          "strategy": "name",
+          "value": "username",
+          "description": "Username input field"
+        },
+        {
+          "name": "password_input",
+          "strategy": "name",
+          "value": "password",
+          "description": "Password input field"
+        },
+        {
+          "name": "login_button",
+          "strategy": "css",
+          "value": "button[type='submit']",
+          "description": "Login submit button"
+        },
+        {
+          "name": "username_validation_error",
+          "strategy": "css",
+          "value": ".oxd-input-field-error",
+          "description": "Username field validation error message"
+        },
+        {
+          "name": "password_validation_error",
+          "strategy": "css",
+          "value": ".oxd-input-field-error",
+          "description": "Password field validation error message"
+        }
+      ],
+      "actions": [
+        {
+          "step": 1,
+          "action": "navigate",
+          "target": "target_url",
+          "value": "",
+          "description": "Navigate to OrangeHRM login page"
+        },
+        {
+          "step": 2,
+          "action": "wait",
+          "target": "username_input",
+          "value": "visible",
+          "description": "Wait for username field to be visible"
+        },
+        {
+          "step": 3,
+          "action": "click",
+          "target": "login_button",
+          "value": "",
+          "description": "Click the Login button with both fields empty"
+        },
+        {
+          "step": 4,
+          "action": "wait",
+          "target": "username_validation_error",
+          "value": "visible",
+          "description": "Wait for validation errors to be visible"
+        }
+      ],
+      "assertions": [
+        {
+          "type": "url_contains",
+          "target": "current_url",
+          "value": "/auth/login",
+          "description": "Verify user remains on login page"
+        },
+        {
+          "type": "element_visible",
+          "target": "username_validation_error",
+          "value": "",
+          "description": "Verify username field validation error is displayed"
+        },
+        {
+          "type": "element_visible",
+          "target": "password_validation_error",
+          "value": "",
+          "description": "Verify password field validation error is displayed"
+        },
+        {
+          "type": "text_contains",
+          "target": "username_validation_error",
+          "value": "Required",
+          "description": "Verify username validation error indicates required field"
+        }
+      ],
+      "test_data": {
+        "username": "",
+        "password": ""
+      }
+    },
+    {
+      "tc_id": "TC_001_014",
+      "ac_id": "AC_002",
+      "title": "Verify validation feedback with whitespace-only username",
+      "test_type": "Boundary",
+      "priority": "High",
+      "page_object": "LoginPage",
+      "target_url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
+      "locators": [
+        {
+          "name": "username_input",
+          "strategy": "name",
+          "value": "username",
+          "description": "Username input field"
+        },
+        {
+          "name": "password_input",
+          "strategy": "name",
+          "value": "password",
+          "description": "Password input field"
+        },
+        {
+          "name": "login_button",
+          "strategy": "css",
+          "value": "button[type='submit']",
+          "description": "Login submit button"
+        },
+        {
+          "name": "error_message",
+          "strategy": "css",
+          "value": ".oxd-alert-content-text",
+          "description": "Error message displayed on login failure"
+        },
+        {
+          "name": "validation_error",
+          "strategy": "css",
+          "value": ".oxd-input-field-error",
+          "description": "Field validation error message"
+        }
+      ],
+      "actions": [
+        {
+          "step": 1,
+          "action": "navigate",
+          "target": "target_url",
+          "value": "",
+          "description": "Navigate to OrangeHRM login page"
+        },
+        {
+          "step": 2,
+          "action": "wait",
+          "target": "username_input",
+          "value": "visible",
+          "description": "Wait for username field to be visible"
+        },
+        {
+          "step": 3,
+          "action": "fill",
+          "target": "username_input",
+          "value": "(whitespace)",
+          "description": "Enter whitespace only in the username field"
+        },
+        {
+          "step": 4,
+          "action": "fill",
+          "target": "password_input",
+          "value": "admin123",
+          "description": "Enter password in the password field"
+        },
+        {
+          "step": 5,
+          "action": "click",
+          "target": "login_button",
+          "value": "",
+          "description": "Click the Login button"
+        },
+        {
+          "step": 6,
+          "action": "wait",
+          "target": "error_message",
+          "value": "visible",
+          "description": "Wait for error message or validation feedback to be visible"
+        }
+      ],
+      "assertions": [
+        {
+          "type": "url_contains",
+          "target": "current_url",
+          "value": "/auth/login",
+          "description": "Verify user remains on login page"
+        },
+        {
+          "type": "element_visible",
+          "target": "error_message",
+          "value": "",
+          "description": "Verify error message or validation feedback is displayed"
+        },
+        {
+          "type": "text_contains",
+          "target": "error_message",
+          "value": "Invalid credentials",
+          "description": "Verify error message indicates invalid credentials"
+        }
+      ],
+      "test_data": {
+        "username": "(whitespace)",
+        "password": "admin123"
+      }
+    },
+    {
+      "tc_id": "TC_001_015",
+      "ac_id": "AC_002",
+      "title": "Verify validation feedback with whitespace-only password",
+      "test_type": "Boundary",
+      "priority": "High",
+      "page_object": "LoginPage",
+      "target_url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
+      "locators": [
+        {
+          "name": "username_input",
+          "strategy": "name",
+          "value": "username",
+          "description": "Username input field"
+        },
+        {
+          "name": "password_input",
+          "strategy": "name",
+          "value": "password",
+          "description": "Password input field"
+        },
+        {
+          "name": "login_button",
+          "strategy": "css",
+          "value": "button[type='submit']",
+          "description": "Login submit button"
+        },
+        {
+          "name": "error_message",
+          "strategy": "css",
+          "value": ".oxd-alert-content-text",
+          "description": "Error message displayed on login failure"
+        },
+        {
+          "name": "validation_error",
+          "strategy": "css",
+          "value": ".oxd-input-field-error",
+          "description": "Field validation error message"
+        }
+      ],
+      "actions": [
+        {
+          "step": 1,
+          "action": "navigate",
+          "target": "target_url",
+          "value": "",
+          "description": "Navigate to OrangeHRM login page"
+        },
+        {
+          "step": 2,
+          "action": "wait",
+          "target": "username_input",
+          "value": "visible",
+          "description": "Wait for username field to be visible"
+        },
+        {
+          "step": 3,
+          "action": "fill",
+          "target": "username_input",
+          "value": "Admin",
+          "description": "Enter username in the username field"
+        },
+        {
+          "step": 4,
+          "action": "fill",
+          "target": "password_input",
+          "value": "(whitespace)",
+          "description": "Enter whitespace only in the password field"
+        },
+        {
+          "step": 5,
+          "action": "click",
+          "target": "login_button",
+          "value": "",
+          "description": "Click the Login button"
+        },
+        {
+          "step": 6,
+          "action": "wait",
+          "target": "error_message",
+          "value": "visible",
+          "description": "Wait for error message or validation feedback to be visible"
+        }
+      ],
+      "assertions": [
+        {
+          "type": "url_contains",
+          "target": "current_url",
+          "value": "/auth/login",
+          "description": "Verify user remains on login page"
+        },
+        {
+          "type": "element_visible",
+          "target": "error_message",
+          "value": "",
+          "description": "Verify error message or validation feedback is displayed"
+        },
+        {
+          "type": "text_contains",
+          "target": "error_message",
+          "value": "Invalid credentials",
+          "description": "Verify error message indicates invalid credentials"
+        }
+      ],
+      "test_data": {
+        "username": "Admin",
+        "password": "(whitespace)"
+      }
+    },
+    {
+      "tc_id": "TC_001_016",
+      "ac_id": "AC_002",
+      "title": "Verify validation feedback with both fields containing whitespace only",
+      "test_type": "Boundary",
+      "priority": "High",
+      "page_object": "LoginPage",
+      "target_url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
+      "locators": [
+        {
+          "name": "username_input",
+          "strategy": "name",
+          "value": "username",
+          "description": "Username input field"
+        },
+        {
+          "name": "password_input",
+          "strategy": "name",
+          "value": "password",
+          "description": "Password input field"
+        },
+        {
+          "name": "login_button",
+          "strategy": "css",
+          "value": "button[type='submit']",
+          "description": "Login submit button"
+        },
+        {
+          "name": "error_message",
+          "strategy": "css",
+          "value": ".oxd-alert-content-text",
+          "description": "Error message displayed on login failure"
+        },
+        {
+          "name": "validation_error",
+          "strategy": "css",
+          "value": ".oxd-input-field-error",
+          "description": "Field validation error message"
+        }
+      ],
+      "actions": [
+        {
+          "step": 1,
+          "action": "navigate",
+          "target": "target_url",
+          "value": "",
+          "description": "Navigate to OrangeHRM login page"
+        },
+        {
+          "step": 2,
+          "action": "wait",
+          "target": "username_input",
+          "value": "visible",
+          "description": "Wait for username field to be visible"
+        },
+        {
+          "step": 3,
+          "action": "fill",
+          "target": "username_input",
+          "value": "(whitespace)",
+          "description": "Enter whitespace only in the username field"
+        },
+        {
+          "step": 4,
+          "action": "fill",
+          "target": "password_input",
+          "value": "(whitespace)",
+          "description": "Enter whitespace only in the password field"
+        },
+        {
+          "step": 5,
+          "action": "click",
+          "target": "login_button",
+          "value": "",
+          "description": "Click the Login button"
+        },
+        {
+          "step": 6,
+          "action": "wait",
+          "target": "error_message",
+          "value": "visible",
+          "description": "Wait for error message or validation feedback to be visible"
+        }
+      ],
+      "assertions": [
+        {
+          "type": "url_contains",
+          "target": "current_url",
+          "value": "/auth/login",
+          "description": "Verify user remains on login page"
+        },
+        {
+          "type": "element_visible",
+          "target": "error_message",
+          "value": "",
+          "description": "Verify error message or validation feedback is displayed"
+        },
+        {
+          "type": "text_contains",
+          "target": "error_message",
+          "value": "Invalid credentials",
+          "description": "Verify error message indicates invalid credentials"
+        }
+      ],
+      "test_data": {
+        "username": "(whitespace)",
+        "password": "(whitespace)"
+      }
+    },
+    {
+      "tc_id": "TC_001_017",
+      "ac_id": "AC_002",
+      "title": "Verify 'Invalid credentials' error with invalid username and wrong password",
+      "test_type": "Negative",
+      "priority": "High",
+      "page_object": "LoginPage",
+      "target_url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
+      "locators": [
+        {
+          "name": "username_input",
+          "strategy": "name",
+          "value": "username",
+          "description": "Username input field"
+        },
+        {
+          "name": "password_input",
+          "strategy": "name",
+          "value": "password",
+          "description": "Password input field"
+        },
+        {
+          "name": "login_button",
+          "strategy": "css",
+          "value": "button[type='submit']",
+          "description": "Login submit button"
+        },
+        {
+          "name": "error_message",
+          "strategy": "css",
+          "value": ".oxd-alert-content-text",
+          "description": "Error message displayed on login failure"
+        }
+      ],
+      "actions": [
+        {
+          "step": 1,
+          "action": "navigate",
+          "target": "target_url",
+          "value": "",
+          "description": "Navigate to OrangeHRM login page"
+        },
+        {
+          "step": 2,
+          "action": "wait",
+          "target": "username_input",
+          "value": "visible",
+          "description": "Wait for username field to be visible"
+        },
+        {
+          "step": 3,
+          "action": "fill",
+          "target": "username_input",
+          "value": "invaliduser",
+          "description": "Enter invalid username in the username field"
+        },
+        {
+          "step": 4,
+          "action": "fill",
+          "target": "password_input",
+          "value": "wrongpassword",
+          "description": "Enter wrong password in the password field"
+        },
+        {
+          "step": 5,
+          "action": "click",
+          "target": "login_button",
+          "value": "",
+          "description": "Click the Login button"
+        },
+        {
+          "step": 6,
+          "action": "wait",
+          "target": "error_message",
+          "value": "visible",
+          "description": "Wait for error message to be visible"
+        }
+      ],
+      "assertions": [
+        {
+          "type": "url_contains",
+          "target": "current_url",
+          "value": "/auth/login",
+          "description": "Verify user remains on login page"
+        },
+        {
+          "type": "element_visible",
+          "target": "error_message",
+          "value": "",
+          "description": "Verify error message is displayed"
+        },
+        {
+          "type": "text_equals",
+          "target": "error_message",
+          "value": "Invalid credentials",
+          "description": "Verify exact error message text is displayed"
+        }
+      ],
+      "test_data": {
+        "username": "invaliduser",
+        "password": "wrongpassword"
+      }
+    },
+    {
+      "tc_id": "TC_001_018",
+      "ac_id": "AC_003",
+      "title": "Verify username input field is visible and accepts text input",
+      "test_type": "UI",
+      "priority": "Medium",
+      "page_object": "LoginPage",
+      "target_url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
+      "locators": [
+        {
+          "name": "username_input",
+          "strategy": "name",
+          "value": "username",
+          "description": "Username input field"
+        },
+        {
+          "name": "login_page_title",
+          "strategy": "css",
+          "value": ".oxd-text-h5",
+          "description": "Login page title to verify page load"
+        }
+      ],
+      "actions": [
+        {
+          "step": 1,
+          "action": "navigate",
+          "target": "target_url",
+          "value": "",
+          "description": "Navigate to OrangeHRM login page"
+        },
+        {
+          "step": 2,
+          "action": "wait",
+          "target": "login_page_title",
+          "value": "visible",
+          "description": "Wait for page to fully load"
+        },
+        {
+          "step": 3,
+          "action": "wait",
+          "target": "username_input",
+          "value": "visible",
+          "description": "Verify username input field is visible"
+        },
+        {
+          "step": 4,
+          "action": "click",
+          "target": "username_input",
+          "value": "",
+          "description": "Click on the username input field"
+        },
+        {
+          "step": 5,
+          "action": "fill",
+          "target": "username_input",
+          "value": "Admin",
+          "description": "Type Admin in the username field"
+        }
+      ],
+      "assertions": [
+        {
+          "type": "element_visible",
+          "target": "username_input",
+          "value": "",
+          "description": "Verify username input field is visible and enabled"
+        },
+        {
+          "type": "attr_equals",
+          "target": "username_input",
+          "value": "Admin",
+          "description": "Verify username field contains the entered text"
+        }
+      ],
+      "test_data": {
+        "input_text": "Admin"
+      }
+    },
+    {
+      "tc_id": "TC_001_019",
+      "ac_id": "AC_003",
+      "title": "Verify password input field is visible and accepts text input",
+      "test_type": "UI",
+      "priority": "Medium",
+      "page_object": "LoginPage",
+      "target_url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
+      "locators": [
+        {
+          "name": "password_input",
+          "strategy": "name",
+          "value": "password",
+          "description": "Password input field"
+        },
+        {
+          "name": "login_page_title",
+          "strategy": "css",
+          "value": ".oxd-text-h5",
+          "description": "Login page title to verify page load"
+        }
+      ],
+      "actions": [
+        {
+          "step": 1,
+          "action": "navigate",
+          "target": "target_url",
+          "value": "",
+          "description": "Navigate to OrangeHRM login page"
+        },
+        {
+          "step": 2,
+          "action": "wait",
+          "target": "login_page_title",
+          "value": "visible",
+          "description": "Wait for page to fully load"
+        },
+        {
+          "step": 3,
+          "action": "wait",
+          "target": "password_input",
+          "value": "visible",
+          "description": "Verify password input field is visible"
+        },
+        {
+          "step": 4,
+          "action": "click",
+          "target": "password_input",
+          "value": "",
+          "description": "Click on the password input field"
+        },
+        {
+          "step": 5,
+          "action": "fill",
+          "target": "password_input",
+          "value": "admin123",
+          "description": "Type admin123 in the password field"
+        }
+      ],
+      "assertions": [
+        {
+          "type": "element_visible",
+          "target": "password_input",
+          "value": "",
+          "description": "Verify password input field is visible and enabled"
+        },
+        {
+          "type": "attr_equals",
+          "target": "password_input",
+          "value": "password",
+          "description": "Verify password field has type attribute set to password for masking"
+        }
+      ],
+      "test_data": {
+        "input_text": "admin123"
+      }
+    },
+    {
+      "tc_id": "TC_001_020",
+      "ac_id": "AC_003",
+      "title": "Verify Login button is visible and clickable",
+      "test_type": "UI",
+      "priority": "Medium",
+      "page_object": "LoginPage",
+      "target_url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
+      "locators": [
+        {
+          "name": "login_button",
+          "strategy": "css",
+          "value": "button[type='submit']",
+          "description": "Login submit button"
+        },
+        {
+          "name": "login_page_title",
+          "strategy": "css",
+          "value": ".oxd-text-h5",
+          "description": "Login page title to verify page load"
+        }
+      ],
+      "actions": [
+        {
+          "step": 1,
+          "action": "navigate",
+          "target": "target_url",
+          "value": "",
+          "description": "Navigate to OrangeHRM login page"
+        },
+        {
+          "step": 2,
+          "action": "wait",
+          "target": "login_page_title",
+          "value": "visible",
+          "description": "Wait for page to fully load"
+        },
+        {
+          "step": 3,
+          "action": "wait",
+          "target": "login_button",
+          "value": "visible",
+          "description": "Verify Login button is visible on the page"
+        }
+      ],
+      "assertions": [
+        {
+          "type": "element_visible",
+          "target": "login_button",
+          "value": "",
+          "description": "Verify Login button is visible"
+        },
+        {
+          "type": "attr_equals",
+          "target": "login_button",
+          "value": "submit",
+          "description": "Verify Login button type is submit and is enabled"
+        },
+        {
+          "type": "text_contains",
+          "target": "login_button",
+          "value": "Login",
+          "description": "Verify Login button displays correct text"
+        }
+      ],
+      "test_data": {}
+    },
+    {
+      "tc_id": "TC_001_021",
+      "ac_id": "AC_003",
+      "title": "Verify OrangeHRM logo is visible on login page",
+      "test_type": "UI",
+      "priority": "Medium",
+      "page_object": "LoginPage",
+      "target_url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
+      "locators": [
+        {
+          "name": "orangehrm_logo",
+          "strategy": "css",
+          "value": ".orangehrm-logo",
+          "description": "OrangeHRM logo element"
+        },
+        {
+          "name": "logo_image",
+          "strategy": "css",
+          "value": "img[alt='orangehrm']",
+          "description": "OrangeHRM logo image"
+        },
+        {
+          "name": "login_page_container",
+          "strategy": "css",
+          "value": ".orangehrm-login-layout",
+          "description": "Login page container to verify page load"
+        }
+      ],
+      "actions": [
+        {
+          "step": 1,
+          "action": "navigate",
+          "target": "target_url",
+          "value": "",
+          "description": "Navigate to OrangeHRM login page"
+        },
+        {
+          "step": 2,
+          "action": "wait",
+          "target": "login_page_container",
+          "value": "visible",
+          "description": "Wait for page to fully load"
+        },
+        {
+          "step": 3,
+          "action": "wait",
+          "target": "orangehrm_logo",
+          "value": "visible",
+          "description": "Verify OrangeHRM logo is visible on the page"
+        }
+      ],
+      "assertions": [
+        {
+          "type": "element_visible",
+          "target": "orangehrm_logo",
+          "value": "",
+          "description": "Verify OrangeHRM logo is visible"
+        },
+        {
+          "type": "element_visible",
+          "target": "logo_image",
+          "value": "",
+          "description": "Verify logo image element is rendered"
+        },
+        {
+          "type": "attr_equals",
+          "target": "logo_image",
+          "value": "orangehrm",
+          "description": "Verify logo image alt text is correct"
+        }
+      ],
+      "test_data": {}
+    },
+    {
+      "tc_id": "TC_001_022",
+      "ac_id": "AC_003",
+      "title": "Verify form submits and authenticates user with valid credentials",
+      "test_type": "Positive",
+      "priority": "High",
+      "page_object": "LoginPage",
+      "target_url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
+      "locators": [
+        {
+          "name": "username_input",
+          "strategy": "name",
+          "value": "username",
+          "description": "Username input field"
+        },
+        {
+          "name": "password_input",
+          "strategy": "name",
+          "value": "password",
+          "description": "Password input field"
+        },
+        {
+          "name": "login_button",
+          "strategy": "css",
+          "value": "button[type='submit']",
+          "description": "Login submit button"
+        },
+        {
+          "name": "dashboard_container",
+          "strategy": "css",
+          "value": ".oxd-layout",
+          "description": "Dashboard page container"
+        },
+        {
+          "name": "dashboard_header",
+          "strategy": "css",
+          "value": "h6.oxd-text",
+          "description": "Dashboard page header"
+        }
+      ],
+      "actions": [
+        {
+          "step": 1,
+          "action": "navigate",
+          "target": "target_url",
+          "value": "",
+          "description": "Navigate to OrangeHRM login page"
+        },
+        {
+          "step": 2,
+          "action": "wait",
+          "target": "username_input",
+          "value": "visible",
+          "description": "Wait for page to fully load"
+        },
+        {
+          "step": 3,
+          "action": "fill",
+          "target": "username_input",
+          "value": "Admin",
+          "description": "Enter Admin in the username field"
+        },
+        {
+          "step": 4,
+          "action": "fill",
+          "target": "password_input",
+          "value": "admin123",
+          "description": "Enter admin123 in the password field"
+        },
+        {
+          "step": 5,
+          "action": "click",
+          "target": "login_button",
+          "value": "",
+          "description": "Click the Login button to submit form"
+        },
+        {
+          "step": 6,
+          "action": "wait",
+          "target": "dashboard_container",
+          "value": "visible",
+          "description": "Wait for dashboard page to load"
+        }
+      ],
+      "assertions": [
+        {
+          "type": "url_contains",
+          "target": "current_url",
+          "value": "/dashboard",
+          "description": "Verify URL contains /dashboard after successful login"
+        },
+        {
+          "type": "not_url_contains",
+          "target": "current_url",
+          "value": "/auth/login",
+          "description": "Verify user is navigated away from login page"
+        },
+        {
+          "type": "element_visible",
+          "target": "dashboard_container",
+          "value": "",
+          "description": "Verify dashboard page container is visible"
+        },
+        {
+          "type": "element_visible",
+          "target": "dashboard_header",
+          "value": "",
+          "description": "Verify dashboard header is displayed"
+        }
+      ],
+      "test_data": {
+        "username": "Admin",
+        "password": "admin123"
+      }
+    },
+    {
+      "tc_id": "TC_001_023",
+      "ac_id": "AC_003",
+      "title": "Verify form shows error with invalid username and remains on login page",
+      "test_type": "Negative",
+      "priority": "High",
+      "page_object": "LoginPage",
+      "target_url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
+      "locators": [
+        {
+          "name": "username_input",
+          "strategy": "name",
+          "value": "username",
+          "description": "Username input field"
+        },
+        {
+          "name": "password_input",
+          "strategy": "name",
+          "value": "password",
+          "description": "Password input field"
+        },
+        {
+          "name": "login_button",
+          "strategy": "css",
+          "value": "button[type='submit']",
+          "description": "Login submit button"
+        },
+        {
+          "name": "error_message",
+          "strategy": "css",
+          "value": ".oxd-alert-content-text",
+          "description": "Error message displayed after failed login"
+        },
+        {
+          "name": "login_page_title",
+          "strategy": "css",
+          "value": ".oxd-text-h5",
+          "description": "Login page title"
+        }
+      ],
+      "actions": [
+        {
+          "step": 1,
+          "action": "navigate",
+          "target": "target_url",
+          "value": "",
+          "description": "Navigate to OrangeHRM login page"
+        },
+        {
+          "step": 2,
+          "action": "wait",
+          "target": "login_page_title",
+          "value": "visible",
+          "description": "Wait for page to fully load"
+        },
+        {
+          "step": 3,
+          "action": "fill",
+          "target": "username_input",
+          "value": "invaliduser",
+          "description": "Enter invaliduser in the username field"
+        },
+        {
+          "step": 4,
+          "action": "fill",
+          "target": "password_input",
+          "value": "admin123",
+          "description": "Enter admin123 in the password field"
+        },
+        {
+          "step": 5,
+          "action": "click",
+          "target": "login_button",
+          "value": "",
+          "description": "Click the Login button to submit form"
+        },
+        {
+          "step": 6,
+          "action": "wait",
+          "target": "error_message",
+          "value": "visible",
+          "description": "Wait for error message to be displayed"
+        }
+      ],
+      "assertions": [
+        {
+          "type": "url_contains",
+          "target": "current_url",
+          "value": "/auth/login",
+          "description": "Verify user remains on login page after failed authentication"
+        },
+        {
+          "type": "element_visible",
+          "target": "error_message",
+          "value": "",
+          "description": "Verify error message is displayed on login page"
+        },
+        {
+          "type": "text_contains",
+          "target": "error_message",
+          "value": "Invalid credentials",
+          "description": "Verify error message contains invalid credentials text"
+        },
+        {
+          "type": "element_visible",
+          "target": "login_page_title",
+          "value": "",
+          "description": "Verify login page title is still visible"
+        }
+      ],
+      "test_data": {
+        "username": "invaliduser",
+        "password": "admin123"
+      }
+    },
+    {
+      "tc_id": "TC_001_024",
+      "ac_id": "AC_003",
+      "title": "Verify form shows error with incorrect password and remains on login page",
+      "test_type": "Negative",
+      "priority": "High",
+      "page_object": "LoginPage",
+      "target_url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
+      "locators": [
+        {
+          "name": "username_input",
+          "strategy": "name",
+          "value": "username",
+          "description": "Username input field"
+        },
+        {
+          "name": "password_input",
+          "strategy": "name",
+          "value": "password",
+          "description": "Password input field"
+        },
+        {
+          "name": "login_button",
+          "strategy": "css",
+          "value": "button[type='submit']",
+          "description": "Login submit button"
+        },
+        {
+          "name": "error_message",
+          "strategy": "css",
+          "value": ".oxd-alert-content-text",
+          "description": "Error message displayed after failed login"
+        },
+        {
+          "name": "login_page_title",
+          "strategy": "css",
+          "value": ".oxd-text-h5",
+          "description": "Login page title"
+        }
+      ],
+      "actions": [
+        {
+          "step": 1,
+          "action": "navigate",
+          "target": "target_url",
+          "value": "",
+          "description": "Navigate to OrangeHRM login page"
+        },
+        {
+          "step": 2,
+          "action": "wait",
+          "target": "login_page_title",
+          "value": "visible",
+          "description": "Wait for page to fully load"
+        },
+        {
+          "step": 3,
+          "action": "fill",
+          "target": "username_input",
+          "value": "Admin",
+          "description": "Enter Admin in the username field"
+        },
+        {
+          "step": 4,
+          "action": "fill",
+          "target": "password_input",
+          "value": "wrongpassword",
+          "description": "Enter wrongpassword in the password field"
+        },
+        {
+          "step": 5,
+          "action": "click",
+          "target": "login_button",
+          "value": "",
+          "description": "Click the Login button to submit form"
+        },
+        {
+          "step": 6,
+          "action": "wait",
+          "target": "error_message",
+          "value": "visible",
+          "description": "Wait for error message to be displayed"
+        }
+      ],
+      "assertions": [
+        {
+          "type": "url_contains",
+          "target": "current_url",
+          "value": "/auth/login",
+          "description": "Verify user remains on login page after failed authentication"
+        },
+        {
+          "type": "element_visible",
+          "target": "error_message",
+          "value": "",
+          "description": "Verify error message is displayed on login page"
+        },
+        {
+          "type": "text_contains",
+          "target": "error_message",
+          "value": "Invalid credentials",
+          "description": "Verify error message contains invalid credentials text"
+        },
+        {
+          "type": "element_visible",
+          "target": "login_page_title",
+          "value": "",
+          "description": "Verify login page title is still visible"
+        }
+      ],
+      "test_data": {
+        "username": "Admin",
+        "password": "wrongpassword"
+      }
+    },
+    {
+      "tc_id": "TC_001_025",
+      "ac_id": "AC_003",
+      "title": "Verify all login page elements are properly positioned and visible",
+      "test_type": "UI",
+      "priority": "Medium",
+      "page_object": "LoginPage",
+      "target_url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
+      "locators": [
+        {
+          "name": "orangehrm_logo",
+          "strategy": "css",
+          "value": ".orangehrm-logo",
+          "description": "OrangeHRM logo element"
+        },
+        {
+          "name": "username_label",
+          "strategy": "css",
+          "value": "label[for='txtUsername']",
+          "description": "Username field label"
+        },
+        {
+          "name": "username_input",
+          "strategy": "name",
+          "value": "username",
+          "description": "Username input field"
+        },
+        {
+          "name": "password_label",
+          "strategy": "css",
+          "value": "label[for='txtPassword']",
+          "description": "Password field label"
+        },
+        {
+          "name": "password_input",
+          "strategy": "name",
+          "value": "password",
+          "description": "Password input field"
+        },
+        {
+          "name": "login_button",
+          "strategy": "css",
+          "value": "button[type='submit']",
+          "description": "Login submit button"
+        },
+        {
+          "name": "login_page_container",
+          "strategy": "css",
+          "value": ".orangehrm-login-layout",
+          "description": "Login page main container"
+        }
+      ],
+      "actions": [
+        {
+          "step": 1,
+          "action": "navigate",
+          "target": "target_url",
+          "value": "",
+          "description": "Navigate to OrangeHRM login page"
+        },
+        {
+          "step": 2,
+          "action": "wait",
+          "target": "login_page_container",
+          "value": "visible",
+          "description": "Wait for page to fully load"
+        },
+        {
+          "step": 3,
+          "action": "wait",
+          "target": "orangehrm_logo",
+          "value": "visible",
+          "description": "Verify OrangeHRM logo is visible at the top"
+        },
+        {
+          "step": 4,
+          "action": "wait",
+          "target": "username_label",
+          "value": "visible",
+          "description": "Verify username label is visible"
+        },
+        {
+          "step": 5,
+          "action": "wait",
+          "target": "username_input",
+          "value": "visible",
+          "description": "Verify username input field is visible"
+        },
+        {
+          "step": 6,
+          "action": "wait",
+          "target": "password_label",
+          "value": "visible",
+          "description": "Verify password label is visible"
+        },
+        {
+          "step": 7,
+          "action": "wait",
+          "target": "password_input",
+          "value": "visible",
+          "description": "Verify password input field is visible"
+        },
+        {
+          "step": 8,
+          "action": "wait",
+          "target": "login_button",
+          "value": "visible",
+          "description": "Verify Login button is visible"
+        }
+      ],
+      "assertions": [
+        {
+          "type": "element_visible",
+          "target": "orangehrm_logo",
+          "value": "",
+          "description": "Verify OrangeHRM logo is visible and properly positioned"
+        },
+        {
+          "type": "element_visible",
+          "target": "username_label",
+          "value": "",
+          "description": "Verify username label is visible"
+        },
+        {
+          "type": "element_visible",
+          "target": "username_input",
+          "value": "",
+          "description": "Verify username input field is visible and properly positioned"
+        },
+        {
+          "type": "element_visible",
+          "target": "password_label",
+          "value": "",
+          "description": "Verify password label is visible"
+        },
+        {
+          "type": "element_visible",
+          "target": "password_input",
+          "value": "",
+          "description": "Verify password input field is visible and properly positioned"
+        },
+        {
+          "type": "element_visible",
+          "target": "login_button",
+          "value": "",
+          "description": "Verify Login button is visible and properly positioned"
+        }
+      ],
+      "test_data": {}
+    },
+    {
+      "tc_id": "TC_001_026",
+      "ac_id": "AC_003",
+      "title": "Verify form behavior with empty username and valid password",
+      "test_type": "Negative",
+      "priority": "High",
+      "page_object": "LoginPage",
+      "target_url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
+      "locators": [
+        {
+          "name": "username_input",
+          "strategy": "name",
+          "value": "username",
+          "description": "Username input field"
+        },
+        {
+          "name": "password_input",
+          "strategy": "name",
+          "value": "password",
+          "description": "Password input field"
+        },
+        {
+          "name": "login_button",
+          "strategy": "css",
+          "value": "button[type='submit']",
+          "description": "Login submit button"
+        },
+        {
+          "name": "username_validation_error",
+          "strategy": "css",
+          "value": ".oxd-input-field-error",
+          "description": "Username field validation error message"
+        },
+        {
+          "name": "login_page_title",
+          "strategy": "css",
+          "value": ".oxd-text-h5",
+          "description": "Login page title"
+        }
+      ],
+      "actions": [
+        {
+          "step": 1,
+          "action": "navigate",
+          "target": "target_url",
+          "value": "",
+          "description": "Navigate to OrangeHRM login page"
+        },
+        {
+          "step": 2,
+          "action": "wait",
+          "target": "login_page_title",
+          "value": "visible",
+          "description": "Wait for page to fully load"
+        },
+        {
+          "step": 3,
+          "action": "fill",
+          "target": "password_input",
+          "value": "admin123",
+          "description": "Enter admin123 in the password field"
+        },
+        {
+          "step": 4,
+          "action": "click",
+          "target": "login_button",
+          "value": "",
+          "description": "Click the Login button with empty username"
+        },
+        {
+          "step": 5,
+          "action": "wait",
+          "target": "username_validation_error",
+          "value": "visible",
+          "description": "Wait for validation error message to be displayed"
+        }
+      ],
+      "assertions": [
+        {
+          "type": "url_contains",
+          "target": "current_url",
+          "value": "/auth/login",
+          "description": "Verify page does not navigate away from login page"
+        },
+        {
+          "type": "element_visible",
+          "target": "username_validation_error",
+          "value": "",
+          "description": "Verify validation error message is displayed"
+        },
+        {
+          "type": "text_contains",
+          "target": "username_validation_error",
+          "value": "Required",
+          "description": "Verify error message indicates required field"
+        },
+        {
+          "type": "element_visible",
+          "target": "login_page_title",
+          "value": "",
+          "description": "Verify user remains on login page"
+        }
+      ],
+      "test_data": {
+        "username": "",
+        "password": "admin123"
+      }
+    },
+    {
+      "tc_id": "TC_001_027",
+      "ac_id": "AC_003",
+      "title": "Verify form behavior with valid username and empty password",
+      "test_type": "Negative",
+      "priority": "High",
+      "page_object": "LoginPage",
+      "target_url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
+      "locators": [
+        {
+          "name": "username_input",
+          "strategy": "name",
+          "value": "username",
+          "description": "Username input field"
+        },
+        {
+          "name": "password_input",
+          "strategy": "name",
+          "value": "password",
+          "description": "Password input field"
+        },
+        {
+          "name": "login_button",
+          "strategy": "css",
+          "value": "button[type='submit']",
+          "description": "Login submit button"
+        },
+        {
+          "name": "password_validation_error",
+          "strategy": "css",
+          "value": ".oxd-input-field-error",
+          "description": "Password field validation error message"
+        },
+        {
+          "name": "login_page_title",
+          "strategy": "css",
+          "value": ".oxd-text-h5",
+          "description": "Login page title"
+        }
+      ],
+      "actions": [
+        {
+          "step": 1,
+          "action": "navigate",
+          "target": "target_url",
+          "value": "",
+          "description": "Navigate to OrangeHRM login page"
+        },
+        {
+          "step": 2,
+          "action": "wait",
+          "target": "login_page_title",
+          "value": "visible",
+          "description": "Wait for page to fully load"
+        },
+        {
+          "step": 3,
+          "action": "fill",
+          "target": "username_input",
+          "value": "Admin",
+          "description": "Enter Admin in the username field"
+        },
+        {
+          "step": 4,
+          "action": "click",
+          "target": "login_button",
+          "value": "",
+          "description": "Click the Login button with empty password"
+        },
+        {
+          "step": 5,
+          "action": "wait",
+          "target": "password_validation_error",
+          "value": "visible",
+          "description": "Wait for validation error message to be displayed"
+        }
+      ],
+      "assertions": [
+        {
+          "type": "url_contains",
+          "target": "current_url",
+          "value": "/auth/login",
+          "description": "Verify page does not navigate away from login page"
+        },
+        {
+          "type": "element_visible",
+          "target": "password_validation_error",
+          "value": "",
+          "description": "Verify validation error message is displayed"
+        },
+        {
+          "type": "text_contains",
+          "target": "password_validation_error",
+          "value": "Required",
+          "description": "Verify error message indicates required field"
+        },
+        {
+          "type": "element_visible",
+          "target": "login_page_title",
+          "value": "",
+          "description": "Verify user remains on login page"
+        }
+      ],
+      "test_data": {
+        "username": "Admin",
+        "password": ""
       }
     }
   ]

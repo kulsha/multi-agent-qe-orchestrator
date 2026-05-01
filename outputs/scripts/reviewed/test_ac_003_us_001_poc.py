@@ -1,7 +1,7 @@
 import re
 import pytest
-from playwright.async_api import async_playwright, expect
-from pages.login import LoginPage
+from playwright.async_api import async_playwright, expect, Page
+from pages.loginpage import LoginPage
 
 
 # Test data constants
@@ -9,177 +9,313 @@ VALID_USERNAME = "Admin"
 VALID_PASSWORD = "admin123"
 INVALID_USERNAME = "invaliduser"
 INVALID_PASSWORD = "wrongpassword"
-TEST_USERNAME = "testusername"
-TEST_PASSWORD = "testpassword"
-DASHBOARD_URL_PATTERN = re.compile(r'/dashboard')
-LOGIN_PAGE_URL_PATTERN = re.compile(r'/auth/login')
+ERROR_INVALID_CREDENTIALS = "Invalid credentials"
+LOGIN_URL_PATTERN = r'/auth/login'
+DASHBOARD_URL_PATTERN = r'/dashboard'
 
 
 @pytest.fixture
-async def login_page():
-    """Fixture to provide LoginPage instance with browser lifecycle management."""
+async def browser_context():
+    """Fixture to provide browser context with proper cleanup."""
     async with async_playwright() as p:
         browser = await p.chromium.launch()
-        page = await browser.new_page()
-        login_page_instance = LoginPage(page)
-        await login_page_instance.navigate()
-        await page.wait_for_load_state("networkidle")
-        yield login_page_instance
+        context = await browser.new_context()
+        page = await context.new_page()
+        yield page
+        await context.close()
         await browser.close()
 
 
+@pytest.fixture
+async def login_page(browser_context: Page) -> LoginPage:
+    """Fixture to provide initialized LoginPage instance."""
+    return LoginPage(browser_context)
+
+
 @pytest.mark.asyncio
-async def test_tc_003_001(login_page):
+async def test_tc_001_018(login_page: LoginPage):
     """
-    TEST CASE TC_003_001: Verify login page elements visibility.
+    TC_001_018: Verify username input field is visible and accepts text input
     
-    Type: UI
-    
-    Expected Result: All login page elements (username input, password input, login button, logo) are visible.
+    UI test case that verifies the username input field is visible,
+    enabled, and properly accepts text input.
     """
-    # Assertion 1: Username input field is visible
+    # Step 1: Navigate to login page
+    await login_page.navigate()
+    await login_page.page.wait_for_load_state("networkidle")
+    
+    # Step 2: Wait for username input to be visible
     await expect(login_page.username_input_field).to_be_visible()
     
-    # Assertion 2: Password input field is visible
-    await expect(login_page.password_input_field).to_be_visible()
+    # Step 3: Click on username input field
+    await login_page.username_input_field.click()
     
-    # Assertion 3: Login button is visible
-    await expect(login_page.loginButton).to_be_visible()
+    # Step 4: Fill username field
+    await login_page.username_input_field.fill(VALID_USERNAME)
     
-    # Assertion 4: OrangeHRM logo is visible
-    await expect(login_page.logo).to_be_visible()
-
-
-@pytest.mark.asyncio
-async def test_tc_003_002(login_page):
-    """
-    TEST CASE TC_003_002: Verify username input field functionality.
-    
-    Type: UI
-    Test Data: {"username": "testusername"}
-    
-    Expected Result: Username input field accepts and displays entered text.
-    """
-    # Step 2: Fill username input
-    await login_page.username_input_field.fill(TEST_USERNAME)
-    
-    # Assertion 1: Username input field is visible
+    # Assertions
+    # Assert username input is visible
     await expect(login_page.username_input_field).to_be_visible()
     
-    # Assertion 2: Username input field contains the entered text
-    await expect(login_page.username_input_field).to_have_value(TEST_USERNAME)
+    # Assert username input has correct value
+    await expect(login_page.username_input_field).to_have_value(VALID_USERNAME)
 
 
 @pytest.mark.asyncio
-async def test_tc_003_003(login_page):
+async def test_tc_001_019(login_page: LoginPage):
     """
-    TEST CASE TC_003_003: Verify password input field masking.
+    TC_001_019: Verify password input field is visible and accepts text input
     
-    Type: UI
-    Test Data: {"password": "testpassword"}
-    
-    Expected Result: Password input field has type='password' for character masking and accepts input.
+    UI test case that verifies the password input field is visible,
+    enabled, and has type attribute set to password for masking.
     """
-    # Step 2: Fill password input
-    await login_page.password_input_field.fill(TEST_PASSWORD)
+    # Step 1: Navigate to login page
+    await login_page.navigate()
+    await login_page.page.wait_for_load_state("networkidle")
     
-    # Assertion 1: Password input field is visible
+    # Step 2: Wait for password input to be visible
     await expect(login_page.password_input_field).to_be_visible()
     
-    # Assertion 2: Password input field has type attribute set to 'password'
+    # Step 3: Click on password input field
+    await login_page.password_input_field.click()
+    
+    # Step 4: Fill password field
+    await login_page.password_input_field.fill(VALID_PASSWORD)
+    
+    # Assertions
+    # Assert password input is visible
+    await expect(login_page.password_input_field).to_be_visible()
+    
+    # Assert password input has type attribute set to password
     await expect(login_page.password_input_field).to_have_attribute("type", "password")
 
 
 @pytest.mark.asyncio
-async def test_tc_003_004(login_page):
+async def test_tc_001_020(login_page: LoginPage):
     """
-    TEST CASE TC_003_004: Verify Login button functionality with valid credentials.
+    TC_001_020: Verify Login button is visible and clickable
     
-    Type: Positive
-    Test Data: {"username": "Admin", "password": "admin123"}
-    
-    Expected Result: User is redirected to dashboard and no longer on login page.
+    UI test case that verifies the Login button is visible, has type
+    attribute set to submit, and displays correct text.
     """
-    # Step 2: Fill username
-    await login_page.username_input_field.fill(VALID_USERNAME)
-    
-    # Step 3: Fill password
-    await login_page.password_input_field.fill(VALID_PASSWORD)
-    
-    # Step 4: Click login button and wait for navigation
-    await login_page.loginButton.click()
+    # Step 1: Navigate to login page
+    await login_page.navigate()
     await login_page.page.wait_for_load_state("networkidle")
     
-    # Assertion 1: URL contains /dashboard
-    await expect(login_page.page).to_have_url(DASHBOARD_URL_PATTERN)
+    # Step 2: Wait for login button to be visible
+    await expect(login_page.login_button_locator).to_be_visible()
     
-    # Assertion 2: URL does not contain /auth/login
-    await expect(login_page.page).not_to_have_url(LOGIN_PAGE_URL_PATTERN)
+    # Assertions
+    # Assert login button is visible
+    await expect(login_page.login_button_locator).to_be_visible()
+    
+    # Assert login button has type attribute set to submit
+    await expect(login_page.login_button_locator).to_have_attribute("type", "submit")
+    
+    # Assert login button text contains "Login"
+    await expect(login_page.login_button_locator).to_contain_text("Login")
 
 
 @pytest.mark.asyncio
-async def test_tc_003_005(login_page):
+async def test_tc_001_021(login_page: LoginPage):
     """
-    TEST CASE TC_003_005: Verify error handling for invalid username.
+    TC_001_021: Verify OrangeHRM logo is visible on login page
     
-    Type: Negative
-    Test Data: {"username": "invaliduser", "password": "admin123"}
-    
-    Expected Result: User remains on login page and error message indicating invalid credentials is displayed.
+    UI test case that verifies the OrangeHRM logo and logo image are
+    visible with correct alt text.
     """
-    # Step 2: Fill invalid username
-    await login_page.username_input_field.fill(INVALID_USERNAME)
-    
-    # Step 3: Fill password
-    await login_page.password_input_field.fill(VALID_PASSWORD)
-    
-    # Step 4: Click login button and wait for error
-    await login_page.loginButton.click()
+    # Step 1: Navigate to login page
+    await login_page.navigate()
     await login_page.page.wait_for_load_state("networkidle")
     
-    # Assertion 1: URL contains /auth/login
-    await expect(login_page.page).to_have_url(LOGIN_PAGE_URL_PATTERN)
+    # Step 2: Wait for logo to be visible
+    await expect(login_page.logo).to_be_visible()
     
-    # Assertion 2: Error message is visible
-    await expect(login_page.errorMessage).to_be_visible()
-    
-    # Assertion 3: Error message contains 'Invalid'
-    await expect(login_page.errorMessage).to_contain_text("Invalid")
-    
-    # Additional assertion: Verify error message text content
-    error_text = await login_page.get_errorMessage_text()
-    assert error_text is not None and "Invalid" in error_text, "Error message should contain 'Invalid' text"
+    # Assertions
+    # Assert logo is visible
+    await expect(login_page.logo).to_be_visible()
 
 
 @pytest.mark.asyncio
-async def test_tc_003_006(login_page):
+async def test_tc_001_022(login_page: LoginPage):
     """
-    TEST CASE TC_003_006: Verify error handling for incorrect password.
+    TC_001_022: Verify form submits and authenticates user with valid credentials
     
-    Type: Negative
-    Test Data: {"username": "Admin", "password": "wrongpassword"}
-    
-    Expected Result: User remains on login page and error message indicating invalid credentials is displayed.
+    Positive test case that verifies the login form submits successfully
+    and authenticates the user with valid credentials, redirecting to
+    the dashboard.
     """
-    # Step 2: Fill username
-    await login_page.username_input_field.fill(VALID_USERNAME)
-    
-    # Step 3: Fill incorrect password
-    await login_page.password_input_field.fill(INVALID_PASSWORD)
-    
-    # Step 4: Click login button and wait for error
-    await login_page.loginButton.click()
+    # Step 1: Navigate to login page
+    await login_page.navigate()
     await login_page.page.wait_for_load_state("networkidle")
     
-    # Assertion 1: URL contains /auth/login
-    await expect(login_page.page).to_have_url(LOGIN_PAGE_URL_PATTERN)
+    # Step 2: Wait for username input to be visible
+    await expect(login_page.username_input_field).to_be_visible()
     
-    # Assertion 2: Error message is visible
+    # Step 3-5: Perform login with valid credentials
+    await login_page.login(VALID_USERNAME, VALID_PASSWORD)
+    await login_page.page.wait_for_load_state("networkidle")
+    
+    # Step 6: Verify user is on dashboard
+    await expect(login_page.userNameNav).to_be_visible()
+    
+    # Assertions
+    # Assert URL contains /dashboard
+    await expect(login_page.page).to_have_url(re.compile(DASHBOARD_URL_PATTERN))
+    
+    # Assert URL does not contain /auth/login
+    await expect(login_page.page).not_to_have_url(re.compile(LOGIN_URL_PATTERN))
+    
+    # Assert user navigation element is visible
+    await expect(login_page.userNameNav).to_be_visible()
+    
+    # Assert logo is visible (confirming dashboard loaded)
+    await expect(login_page.logo).to_be_visible()
+
+
+@pytest.mark.asyncio
+async def test_tc_001_023(login_page: LoginPage):
+    """
+    TC_001_023: Verify form shows error with invalid username and remains on login page
+    
+    Negative test case that verifies the login form shows an error message
+    when an invalid username is provided and the user remains on the
+    login page.
+    """
+    # Step 1: Navigate to login page
+    await login_page.navigate()
+    await login_page.page.wait_for_load_state("networkidle")
+    
+    # Step 2: Wait for username input to be visible
+    await expect(login_page.username_input_field).to_be_visible()
+    
+    # Step 3-5: Attempt login with invalid username
+    await login_page.login(INVALID_USERNAME, VALID_PASSWORD)
+    await login_page.page.wait_for_load_state("networkidle")
+    
+    # Step 6: Wait for error message to be visible
     await expect(login_page.errorMessage).to_be_visible()
     
-    # Assertion 3: Error message contains 'Invalid'
-    await expect(login_page.errorMessage).to_contain_text("Invalid")
+    # Assertions
+    # Assert URL remains on login page
+    await expect(login_page.page).to_have_url(re.compile(LOGIN_URL_PATTERN))
     
-    # Additional assertion: Verify error message text content
+    # Assert error message is visible
+    await expect(login_page.errorMessage).to_be_visible()
+    
+    # Assert error message contains correct text
     error_text = await login_page.get_errorMessage_text()
-    assert error_text is not None and "Invalid" in error_text, "Error message should contain 'Invalid' text"
+    assert ERROR_INVALID_CREDENTIALS in error_text.strip()
+    
+    # Assert username input is still visible (user remains on login page)
+    await expect(login_page.username_input_field).to_be_visible()
+
+
+@pytest.mark.asyncio
+async def test_tc_001_024(login_page: LoginPage):
+    """
+    TC_001_024: Verify form shows error with incorrect password and remains on login page
+    
+    Negative test case that verifies the login form shows an error message
+    when an incorrect password is provided and the user remains on the
+    login page.
+    """
+    # Step 1: Navigate to login page
+    await login_page.navigate()
+    await login_page.page.wait_for_load_state("networkidle")
+    
+    # Step 2: Wait for username input to be visible
+    await expect(login_page.username_input_field).to_be_visible()
+    
+    # Step 3-5: Attempt login with incorrect password
+    await login_page.login(VALID_USERNAME, INVALID_PASSWORD)
+    await login_page.page.wait_for_load_state("networkidle")
+    
+    # Step 6: Wait for error message to be visible
+    await expect(login_page.errorMessage).to_be_visible()
+    
+    # Assertions
+    # Assert URL remains on login page
+    await expect(login_page.page).to_have_url(re.compile(LOGIN_URL_PATTERN))
+    
+    # Assert error message is visible
+    await expect(login_page.errorMessage).to_be_visible()
+    
+    # Assert error message contains correct text
+    error_text = await login_page.get_errorMessage_text()
+    assert ERROR_INVALID_CREDENTIALS in error_text.strip()
+    
+    # Assert username input is still visible (user remains on login page)
+    await expect(login_page.username_input_field).to_be_visible()
+
+
+@pytest.mark.asyncio
+async def test_tc_001_025(login_page: LoginPage):
+    """
+    TC_001_025: Verify all login page elements are properly positioned and visible
+    
+    UI test case that verifies all login page elements including logo,
+    labels, input fields, and button are visible and properly positioned.
+    """
+    # Step 1: Navigate to login page
+    await login_page.navigate()
+    await login_page.page.wait_for_load_state("networkidle")
+    
+    # Step 2-8: Wait for all elements to be visible
+    await expect(login_page.logo).to_be_visible()
+    await expect(login_page.username_input_field).to_be_visible()
+    await expect(login_page.password_input_field).to_be_visible()
+    await expect(login_page.login_button_locator).to_be_visible()
+    
+    # Assertions
+    # Assert logo is visible
+    await expect(login_page.logo).to_be_visible()
+    
+    # Assert username input is visible
+    await expect(login_page.username_input_field).to_be_visible()
+    
+    # Assert password input is visible
+    await expect(login_page.password_input_field).to_be_visible()
+    
+    # Assert login button is visible
+    await expect(login_page.login_button_locator).to_be_visible()
+
+
+@pytest.mark.asyncio
+async def test_tc_001_026(login_page: LoginPage):
+    """
+    TC_001_026: Verify form behavior with empty username and valid password
+    
+    Negative test case that verifies the form shows validation error when
+    username field is empty and user remains on login page.
+    """
+    # Step 1: Navigate to login page
+    await login_page.navigate()
+    await login_page.page.wait_for_load_state("networkidle")
+    
+    # Step 2: Wait for username input to be visible
+    await expect(login_page.username_input_field).to_be_visible()
+    
+    # Step 3: Fill password only (username left empty)
+    await login_page.password_input_field.fill(VALID_PASSWORD)
+    
+    # Step 4: Click login button
+    await login_page.login_button_locator.click()
+    await login_page.page.wait_for_load_state("networkidle")
+    
+    # Step 5: Wait for error message to be visible
+    await expect(login_page.errorMessage).to_be_visible()
+    
+    # Assertions
+    # Assert URL remains on login page
+    await expect(login_page.page).to_have_url(re.compile(LOGIN_URL_PATTERN))
+    
+    # Assert error message is visible
+    await expect(login_page.errorMessage).to_be_visible()
+    
+    # Assert error message indicates required field or invalid credentials
+    error_text = await login_page.get_errorMessage_text()
+    assert error_text is not None and len(error_text.strip()) > 0
+    
+    # Assert username input is still visible (user remains on login page)
+    await expect(login_page.username_input_field).to_be_visible()

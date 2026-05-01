@@ -125,6 +125,8 @@ def _get_claude_client():
     """
     Returns a native Anthropic client for Claude Haiku.
     Requires: pip install anthropic
+    Explicitly declares model capabilities including
+    function_calling=True required for GroupChat tool use.
     """
     try:
         from autogen_ext.models.anthropic import AnthropicChatCompletionClient
@@ -149,4 +151,5 @@ def _get_claude_client():
     return AnthropicChatCompletionClient(
         model="claude-haiku-4-5",
         api_key=api_key,
+        model_info=CLAUDE_MODEL_INFO,
     )

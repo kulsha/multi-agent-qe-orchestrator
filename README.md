@@ -10,6 +10,8 @@
 
 A 7-agent AI pipeline built with AutoGen 0.7.5 that reads a user story, generates test cases, writes Playwright scripts, reviews the code, analyzes coverage, and produces an HTML executive report — all without human intervention except one approval checkpoint.
 
+Two orchestration modes available — sequential pipeline for reliability and GroupChat pipeline for intelligent dynamic routing with auto re-routing on quality issues.
+
 ---
 
 ## 📊 Live Pipeline Report
@@ -22,7 +24,9 @@ Real metrics from the latest pipeline run. Regenerated automatically on every ru
 
 ## Architecture
 
-Current implementation uses a **sequential pipeline** orchestrated by `main.py`. Each agent produces a structured output that becomes the input for the next agent in the chain.
+### Mode 1 — Sequential Pipeline (`main.py`)
+
+Fixed order orchestration. Fast, reliable, production-grade. Smart skip logic saves tokens on re-runs.
 
                 ┌──────────────────────────────────────┐
                 │     multi-agent-qe-orchestrator      │
@@ -51,7 +55,7 @@ Current implementation uses a **sequential pipeline** orchestrated by `main.py`.
                           │   Agent 2   │
                           │  Test Case  │
                           │  Designer   │
-                          │ Groq LLaMA3 │
+                          │ Claude Haiku│
                           └──────┬──────┘
                                  │ test cases CSV
                                  │
@@ -104,11 +108,113 @@ Current implementation uses a **sequential pipeline** orchestrated by `main.py`.
                        ────────────────────
                        GitHub Pages (live)
 
-> **Planned enhancement** — A `SelectorGroupChat` upgrade with a
-> GroupChatManager will enable dynamic agent routing. For example
-> if Agent 5 finds critical issues the manager can route scripts
-> back to Agent 4 for regeneration instead of proceeding linearly.
-> This adds true multi-agent intelligence beyond sequential execution.
+---
+
+### Mode 2 — GroupChat Pipeline (`groupchat_pipeline.py`)
+Dynamic orchestration using AutoGen `SelectorGroupChat` with a deterministic Python selector function. The key differentiator — if Agent 5 finds more than 3 critical issues it automatically re-routes back to Agent 4 for script regeneration. Maximum 2 re-route attempts before proceeding.
+
+                ┌──────────────────────────────────────┐
+                │     multi-agent-qe-orchestrator      │
+                │   AutoGen 0.7.5 · SelectorGroupChat  │
+                └──────────────────┬───────────────────┘
+                                   │
+                     User Story (.md file)
+                                   │
+                                   ▼
+      ┌────────────────────────────────────────────────┐
+      │           groupchat_pipeline.py                │
+      │    SelectorGroupChat — 8 participants          │
+      │    Deterministic selector function             │
+      │    Dynamic routing based on signal keywords    │
+      └────────────────────────────────────────────────┘
+                                   │
+                ┌──────────────────┴──────────────────┐
+                │     Pipeline Selector Function       │
+                │   Routes on AGENT_N_COMPLETE signals │
+                │   No LLM involved — 100% reliable   │
+                └──────────────────┬──────────────────┘
+                                   │
+                ┌──────────────────▼──────────────────┐
+                │                                      │
+      ┌─────────┴──┐                        ┌─────────┴──┐
+      │  Agent 1   │                        │  Agent 2   │
+      │   Story    │ ──AGENT_1_COMPLETE────▶│  Test Case │
+      │   Intake   │                        │  Designer  │
+      │ Pure Python│                        │Claude Haiku│
+      └────────────┘                        └─────┬──────┘
+                                                  │
+                                           AWAITING_HUMAN_APPROVAL
+                                                  │
+                                           ┌──────▼──────┐
+                                           │   Human     │
+                                           │  Approver   │
+                                           │  Y/N input  │
+                                           └──────┬──────┘
+                                                  │
+                                           HUMAN_APPROVED
+                                                  │
+                                           ┌──────▼──────┐
+                                           │   Agent 3   │
+                                           │   Script    │
+                                           │   Outline   │
+                                           │Claude Haiku │
+                                           └──────┬──────┘
+                                                  │
+                                           AGENT_3_COMPLETE
+                                                  │
+                                           ┌──────▼──────┐
+                                ┌──────────│   Agent 4   │◀─────────────┐
+                                │          │   Script    │              │
+                                │          │  Generator  │              │
+                                │          │Claude Haiku │              │
+                                │          └──────┬──────┘              │
+                                │                 │                     │
+                                │          AGENT_4_COMPLETE             │
+                                │                 │                REROUTE_TO_AGENT_4
+                                │          ┌──────▼──────┐        (if critical > 3
+                                │          │   Agent 5   │         max 2 attempts)
+                                │          │    Code     │              │
+                                │          │   Reviewer  │──────────────┘
+                                │          │Claude Haiku │
+                                │          └──────┬──────┘
+                                │                 │
+                                │          AGENT_5_COMPLETE
+                                │                 │
+                                │          ┌──────▼──────┐
+                                │          │   Agent 6   │
+                                │          │  Coverage   │
+                                │          │  Analyzer   │
+                                │          │Claude Haiku │
+                                │          └──────┬──────┘
+                                │                 │
+                                │          AGENT_6_COMPLETE
+                                │                 │
+                                │          ┌──────▼──────┐
+                                │          │   Agent 7   │
+                                │          │   Report    │
+                                └─────────▶│  Generator  │
+                                           │Claude Haiku │
+                                           └──────┬──────┘
+                                                  │
+                                           PIPELINE_COMPLETE
+                                                  │
+                                                  ▼
+                                       pipeline_report.html
+                                       ────────────────────
+                                       GitHub Pages (live)
+
+**Key GroupChat feature — auto re-routing:**
+Agent 4 generates scripts
+↓
+Agent 5 reviews — finds 17 critical issues (> threshold of 3)
+↓
+⚠️  REROUTE_TO_AGENT_4 — automatic re-route
+↓
+Agent 4 regenerates with improvements (attempt 2)
+↓
+Agent 5 reviews again — 2 critical issues (≤ threshold)
+↓
+✅ AGENT_5_COMPLETE — proceeds to Agent 6
 
 ---
 
@@ -117,7 +223,7 @@ Current implementation uses a **sequential pipeline** orchestrated by `main.py`.
 | Agent | Name | LLM | Input | Output |
 |---|---|---|---|---|
 | 1 | Story Intake | None — Pure Python | `.md` user story | Structured JSON |
-| 2 | Test Case Designer | Groq LLaMA3 70B | Structured JSON | Test cases CSV |
+| 2 | Test Case Designer | Claude Haiku | Structured JSON | Test cases CSV |
 | 3 | Script Outline | Claude Haiku | Test cases CSV | Action/assertion outlines JSON |
 | 4 | Script Generator | Claude Haiku | Outlines JSON | Playwright `.py` files per AC |
 | 5 | Code Reviewer | Claude Haiku | Scripts + POM class | Reviewed scripts + MD report |
@@ -131,6 +237,7 @@ Current implementation uses a **sequential pipeline** orchestrated by `main.py`.
 | Layer | Technology |
 |---|---|
 | Multi-Agent Framework | AutoGen 0.7.5 (autogen-agentchat + autogen-ext) |
+| GroupChat Orchestration | SelectorGroupChat with deterministic selector |
 | Primary LLM | Claude Haiku 4.5 (Anthropic API) |
 | Secondary LLM | Groq LLaMA3 70B (free tier — 100k tokens/day) |
 | Local LLM Fallback | Ollama Mistral 7B (offline, unlimited) |
@@ -159,16 +266,19 @@ cp .env.example .env
 # GROQ_API_KEY=your_groq_key
 # ANTHROPIC_API_KEY=your_claude_key
 
-# 3. Run the full pipeline
+# 3a. Run sequential pipeline (recommended for daily use)
 python main.py --story stories/US_001_login_poc.md --provider claude
+
+# 3b. Run GroupChat pipeline (dynamic routing + auto re-routing)
+python groupchat_pipeline.py --story stories/US_001_login_poc.md --provider claude
 ```
 
-The pipeline pauses after Agent 2 for your approval. Type `Y` to continue. Everything else runs autonomously. The HTML report opens at `outputs/pipeline_report.html`.
+Both pipelines pause after Agent 2 for your approval. Type `Y` to continue.
 
 **Switch providers anytime:**
 ```bash
-python main.py --story stories/US_001_login_poc.md --provider groq    # Groq free tier
-python main.py --story stories/US_001_login_poc.md --provider ollama  # local offline
+python main.py --story stories/US_001_login_poc.md --provider groq
+python main.py --story stories/US_001_login_poc.md --provider ollama
 ```
 
 **Force a completely fresh run:**
@@ -178,11 +288,26 @@ python main.py --story stories/US_001_login_poc.md --provider claude --force
 
 ---
 
-## Project Structure
+## Two Pipeline Modes Compared
 
+| Feature | `main.py` Sequential | `groupchat_pipeline.py` GroupChat |
+|---|---|---|
+| Orchestration | Fixed order | SelectorGroupChat dynamic |
+| Routing | Hardcoded in Python | Deterministic selector function |
+| Re-routing | Not supported | Auto re-route on critical issues |
+| Speed | Faster | Slightly slower |
+| Token cost | Lower | Higher |
+| Smart skip | Yes | No |
+| Resume on interruption | Yes | No |
+| Best for | Daily runs, CI | Demo, showcase, intelligent QA |
+
+---
+
+## Project Structure
 multi-agent-qe-orchestrator/
 │
-├── main.py                          # Single entry point — runs full pipeline
+├── main.py                          # Sequential pipeline entry point
+├── groupchat_pipeline.py            # GroupChat pipeline entry point
 │
 ├── agents/
 │   ├── story_intake_agent.py        # Agent 1 — parses user story
@@ -194,7 +319,7 @@ multi-agent-qe-orchestrator/
 │   └── report_generator_agent.py    # Agent 7 — generates HTML dashboard
 │
 ├── config/
-│   └── llm_config.py                # Multi-provider LLM config (Groq/Claude/Ollama)
+│   └── llm_config.py                # Multi-provider LLM config
 │
 ├── stories/
 │   └── US_001_login_poc.md          # Sample user story — OrangeHRM login
@@ -203,20 +328,20 @@ multi-agent-qe-orchestrator/
 │   └── login.py                     # Playwright Page Object Model
 │
 ├── outputs/
-│   ├── test_cases/                  # Agent 2 — generated CSV
-│   ├── features/                    # Agent 3 — outline JSON
-│   ├── scripts/                     # Agent 4 — Playwright scripts
-│   │   └── reviewed/                # Agent 5 — improved scripts
-│   ├── review_report.md             # Agent 5 — code review findings
-│   ├── coverage_report.md           # Agent 6 — coverage gap analysis
-│   └── pipeline_report.html         # Agent 7 — executive dashboard
+│   ├── test_cases/                  # Agent 2 output
+│   ├── features/                    # Agent 3 output
+│   ├── scripts/                     # Agent 4 output
+│   │   └── reviewed/                # Agent 5 output
+│   ├── review_report.md             # Agent 5 report
+│   ├── coverage_report.md           # Agent 6 report
+│   └── pipeline_report.html         # Agent 7 report
 │
 ├── docs/
-│   └── index.html                   # GitHub Pages — live pipeline report
+│   └── index.html                   # GitHub Pages live report
 │
 ├── .github/
 │   └── workflows/
-│       └── pipeline_smoke_test.yml  # CI — smoke test on every push
+│       └── pipeline_smoke_test.yml  # CI smoke test
 │
 ├── tests/
 │   └── conftest.py                  # pytest fixtures
@@ -227,15 +352,19 @@ multi-agent-qe-orchestrator/
 
 ## Key Design Decisions
 
-**One file per Acceptance Criteria** — Agent 4 groups all test cases for one AC into a single script file. This mirrors how enterprise QA teams organise test suites and makes the output directly mappable to Polarion or Jira ACs.
+**Two orchestration modes** — Sequential for production reliability, GroupChat for intelligent self-correction. Same 7 agents, different orchestration layers. Demonstrates architectural maturity.
 
-**Smart skip logic** — Re-running the pipeline skips agents whose outputs already exist. Zero tokens consumed on a re-run of a completed pipeline. Use `--force` to override and regenerate everything.
+**Deterministic GroupChat selector** — Rather than relying on an LLM to decide routing (which hallucinates in long pipelines), a Python function routes based on signal keywords in agent outputs. Reliable, predictable, production-grade.
 
-**Resume on interruption** — Agent 3 saves a progress file after every successful outline. If interrupted mid-run by a rate limit or crash it resumes automatically from the last completed test case on the next run.
+**Auto re-routing on quality issues** — GroupChat mode automatically routes back to Agent 4 if Agent 5 finds more than 3 critical issues. Maximum 2 attempts before proceeding. The pipeline self-corrects without human intervention.
 
-**Provider flexibility** — All agents accept a `--provider` flag. Switch between Claude Haiku, Groq LLaMA3, and Ollama Mistral without changing a single line of agent code. Production runs use Claude. Development runs use Ollama locally at zero cost.
+**One file per Acceptance Criteria** — Agent 4 groups all test cases for one AC into a single script file. Mirrors enterprise QA test suite organisation and maps directly to Polarion or Jira ACs.
 
-**Human in the loop** — The pipeline pauses after Agent 2 and shows a test case distribution summary. You approve or stop before any code is generated. This is the one intentional human gate in an otherwise fully autonomous pipeline.
+**Smart skip logic** — Sequential pipeline skips agents whose outputs already exist. Zero tokens consumed on re-runs. Use `--force` to override.
+
+**Resume on interruption** — Agent 3 saves a progress file after every outline. Resumes automatically from the last completed test case on re-run.
+
+**Provider flexibility** — All agents accept a `--provider` flag. Switch between Claude Haiku, Groq LLaMA3, and Ollama Mistral without changing agent code.
 
 ---
 
@@ -243,7 +372,7 @@ multi-agent-qe-orchestrator/
 
 | Provider | Best For | Cost |
 |---|---|---|
-| Claude Haiku 4.5 | Production runs — best JSON and code quality | ~$0.12 per full pipeline run |
+| Claude Haiku 4.5 | Production — best JSON and code quality | ~$0.12 per full pipeline run |
 | Groq LLaMA3 70B | Development — free tier, 100k tokens/day | Free |
 | Ollama Mistral 7B | Offline development — no API needed | Free (local compute) |
 
@@ -251,17 +380,12 @@ multi-agent-qe-orchestrator/
 
 ## Running the Generated Tests
 
-After the pipeline completes, run the reviewed Playwright scripts directly against OrangeHRM:
-
 ```bash
 # Run all reviewed scripts
 pytest outputs/scripts/reviewed/ -v
 
 # Run one AC at a time
 pytest outputs/scripts/reviewed/test_ac_001_us_001_poc.py -v
-
-# Run headless for CI
-pytest outputs/scripts/reviewed/ -v --headed=false
 ```
 
 ---
@@ -272,7 +396,7 @@ Built by **Shashank Kulkarni** — QA Automation Lead at Molex India Business Se
 
 This project demonstrates how Agentic AI can transform the QA lifecycle — from requirements to runnable tests — without manual intervention at any stage except a single human approval gate.
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Shashank%20Kulkarni-blue?logo=linkedin)](www.linkedin.com/in/shashank-kulkarni-844b98b2)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Shashank%20Kulkarni-blue?logo=linkedin)](https://www.linkedin.com/in/shashank-kulkarni-844b98b2)
 
 ---
 

@@ -3,14 +3,14 @@ Agent 2 — Test Case Designer Agent
 ─────────────────────────────────────────────────────────────────
 WHAT IT DOES:
     Reads the structured JSON from Agent 1.
-    Sends each Acceptance Criterion to Groq LLaMA3.
+    Sends each Acceptance Criterion to the LLM.
     Gets back formal test cases in structured JSON format.
     Saves all test cases as a CSV to /outputs/test_cases/
 
 LLM USED:
-    Groq — llama-3.3-70b-versatile
-    Why: Strong structured reasoning, follows output format
-         instructions precisely, free tier sufficient.
+    Configurable via provider parameter.
+    Defaults to Groq — llama-3.3-70b-versatile.
+    Pass provider='claude' for GroupChat pipeline runs.
 
 INPUT  : outputs/US_001_structured.json
 OUTPUT : outputs/test_cases/US_001_test_cases.csv
@@ -27,11 +27,10 @@ from datetime import datetime
 from autogen_agentchat.agents import AssistantAgent
 from autogen_agentchat.teams import RoundRobinGroupChat
 from autogen_agentchat.conditions import TextMentionTermination
-from autogen_ext.models.openai import OpenAIChatCompletionClient
 
 import sys
 sys.path.append(str(Path(__file__).parent.parent))
-from config.llm_config import get_client
+from config.llm_config import get_client, PROVIDERS
 
 
 # ── Paths ──────────────────────────────────────────────────────
@@ -90,7 +89,6 @@ tc_id format rule:
   Example: story US_001, first test case = TC_001_001
 
 test_type must be one of: Positive, Negative, Boundary, UI
-
 priority must be one of: High, Medium, Low
 """
 
@@ -100,7 +98,7 @@ priority must be one of: High, Medium, Low
 def build_prompt(story: dict, ac: dict) -> str:
     """
     Builds the prompt sent to the LLM for one AC.
-    Includes story context, the AC details, test data,
+    Includes story context, AC details, test data,
     and out-of-scope items so the LLM has full context.
     """
     out_of_scope  = "\n".join(
@@ -142,18 +140,15 @@ Return ONLY the JSON array.
 def parse_llm_response(raw_response: str) -> list:
     """
     Extracts and parses the JSON array from the LLM response.
-    Handles cases where the LLM wraps output in markdown fences
-    despite being told not to — defensive parsing.
+    Handles cases where the LLM wraps output in markdown fences.
     """
     text = raw_response.strip()
 
-    # Strip markdown code fences if present
     if "```" in text:
         lines = text.splitlines()
         lines = [l for l in lines if not l.strip().startswith("```")]
         text  = "\n".join(lines).strip()
 
-    # Find the JSON array boundaries
     start = text.find('[')
     end   = text.rfind(']') + 1
 
@@ -171,9 +166,8 @@ def parse_llm_response(raw_response: str) -> list:
 def save_to_csv(test_cases: list, story_id: str) -> Path:
     """
     Saves the list of test case dicts to a CSV file.
-    Lists (preconditions, test_steps) are joined with ' | '
-    so they fit cleanly in a spreadsheet cell.
-    Dicts (test_data) are serialised as JSON strings.
+    Lists are joined with ' | ' for spreadsheet compatibility.
+    Dicts are serialised as JSON strings.
     """
     TEST_CASE_DIR.mkdir(parents=True, exist_ok=True)
     output_path = TEST_CASE_DIR / f"{story_id}_test_cases.csv"
@@ -205,19 +199,21 @@ def save_to_csv(test_cases: list, story_id: str) -> Path:
 
 # ── Core Async Runner ──────────────────────────────────────────
 
-async def design_test_cases(story: dict) -> list:
+async def design_test_cases(
+    story: dict,
+    provider: str = "groq"
+) -> list:
     """
     Creates one AssistantAgent per run.
     Loops through every AC in the story.
     Sends each AC to the LLM as a separate conversation.
     Collects and returns all test cases as a flat list.
 
-    Why one conversation per AC (not all ACs at once):
-    - Keeps each prompt focused and within token limits
-    - Avoids the LLM mixing up test cases across ACs
-    - Makes retry logic easier if one AC fails
+    Args:
+        story    : Story dict from structured JSON
+        provider : LLM provider — groq, claude, ollama
     """
-    client = get_client(provider='groq')
+    client = get_client(provider=provider)
 
     agent = AssistantAgent(
         name="Test_Case_Designer_Agent",
@@ -225,18 +221,23 @@ async def design_test_cases(story: dict) -> list:
         system_message=SYSTEM_PROMPT
     )
 
-    termination        = TextMentionTermination("TERMINATE")
-    all_test_cases     = []
+    termination         = TextMentionTermination("TERMINATE")
+    all_test_cases      = []
     acceptance_criteria = story.get("acceptance_criteria", [])
 
-    print(f"\n  Processing {len(acceptance_criteria)} Acceptance Criteria...\n")
+    print(
+        f"\n  Processing "
+        f"{len(acceptance_criteria)} Acceptance Criteria...\n"
+    )
 
     for i, ac in enumerate(acceptance_criteria, 1):
-        print(f"  [{i}/{len(acceptance_criteria)}] Generating for {ac['id']} — {ac['title']}")
+        print(
+            f"  [{i}/{len(acceptance_criteria)}] "
+            f"Generating for {ac['id']} — {ac['title']}"
+        )
 
         prompt = build_prompt(story, ac)
 
-        # Fresh team per AC to prevent conversation history contamination
         team = RoundRobinGroupChat(
             participants=[agent],
             termination_condition=termination,
@@ -245,7 +246,6 @@ async def design_test_cases(story: dict) -> list:
 
         result = await team.run(task=prompt)
 
-        # Extract the assistant reply — skip the user echo message
         assistant_reply = ""
         for msg in result.messages:
             if msg.source != "user":
@@ -269,7 +269,10 @@ async def design_test_cases(story: dict) -> list:
 
 # ── Main Entry Point ───────────────────────────────────────────
 
-def run(story_file: str) -> list:
+def run(
+    story_file: str,
+    provider: str = "groq"
+) -> dict:
     """
     Orchestrates Agent 2 end-to-end:
     1. Loads structured JSON produced by Agent 1
@@ -280,8 +283,9 @@ def run(story_file: str) -> list:
     Args:
         story_file : JSON output filename from Agent 1
                      e.g. 'US_001_structured.json'
+        provider   : LLM provider — groq, claude, ollama
     Returns:
-        List of all test case dicts
+        Dict with total_test_cases and test_type_counts
     """
     json_path = OUTPUTS_DIR / story_file
 
@@ -296,6 +300,7 @@ def run(story_file: str) -> list:
 
     story    = data["story"]
     story_id = story.get("story_id", "US_000")
+    model    = PROVIDERS.get(provider, {}).get('model', 'unknown')
 
     print(f"\n{'='*60}")
     print(f"  AGENT 2 — Test Case Designer Agent")
@@ -303,20 +308,37 @@ def run(story_file: str) -> list:
     print(f"  Story    : {story_id} — {story.get('feature')}")
     print(f"  App      : {story.get('application')}")
     print(f"  AC Count : {story.get('acceptance_criteria_count')}")
-    print(f"  LLM      : Groq — llama-3.3-70b-versatile")
+    print(f"  LLM      : {provider.capitalize()} — {model}")
 
-    all_test_cases = asyncio.run(design_test_cases(story))
+    all_test_cases = asyncio.run(
+        design_test_cases(story, provider)
+    )
 
     if not all_test_cases:
-        print("\n  ❌ No test cases generated. Check LLM response above.")
-        return []
+        print("\n  ❌ No test cases generated.")
+        return {
+            'total_test_cases': 0,
+            'test_type_counts': {}
+        }
 
     output_path = save_to_csv(all_test_cases, story_id)
 
-    positive = sum(1 for tc in all_test_cases if tc.get("test_type") == "Positive")
-    negative = sum(1 for tc in all_test_cases if tc.get("test_type") == "Negative")
-    boundary = sum(1 for tc in all_test_cases if tc.get("test_type") == "Boundary")
-    ui       = sum(1 for tc in all_test_cases if tc.get("test_type") == "UI")
+    positive = sum(
+        1 for tc in all_test_cases
+        if tc.get("test_type") == "Positive"
+    )
+    negative = sum(
+        1 for tc in all_test_cases
+        if tc.get("test_type") == "Negative"
+    )
+    boundary = sum(
+        1 for tc in all_test_cases
+        if tc.get("test_type") == "Boundary"
+    )
+    ui = sum(
+        1 for tc in all_test_cases
+        if tc.get("test_type") == "UI"
+    )
 
     print(f"\n  ✅ Test Case Generation Complete")
     print(f"\n  Total Test Cases : {len(all_test_cases)}")
@@ -327,7 +349,15 @@ def run(story_file: str) -> list:
     print(f"\n  Output → {output_path}")
     print(f"{'='*60}\n")
 
-    return all_test_cases
+    return {
+        'total_test_cases': len(all_test_cases),
+        'test_type_counts': {
+            'Positive': positive,
+            'Negative': negative,
+            'Boundary': boundary,
+            'UI':       ui
+        }
+    }
 
 
 # ── CLI ────────────────────────────────────────────────────────
@@ -342,5 +372,11 @@ if __name__ == "__main__":
         default="US_001_structured.json",
         help="JSON output filename from Agent 1 inside /outputs/"
     )
+    parser.add_argument(
+        "--provider",
+        type=str,
+        default="groq",
+        help="LLM provider: groq, claude, ollama"
+    )
     args = parser.parse_args()
-    run(args.input)
+    run(args.input, args.provider)

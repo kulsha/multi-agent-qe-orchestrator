@@ -1,380 +1,391 @@
 import re
 import pytest
 from playwright.async_api import async_playwright, expect
-from pages.login import Login
+from pages.loginpage import LoginPage
 
 
 # ============================================================================
-# AC_002: AC_002
+# AC_002 - AC_002
 # ============================================================================
 
 @pytest.mark.asyncio
-async def test_tc_002_001():
+async def test_tc_001_008():
     """
-    TEST CASE TC_002_001: Verify successful login with valid credentials
-    Type: Positive
-    Test Data: {"username": "Admin", "password": "admin123"}
+    TC_001_008: Verify successful redirect to dashboard with valid credentials
     
-    Actions:
-      Step 1: navigate on 'target_url'
-      Step 2: fill on 'username_input' value=Admin
-      Step 3: fill on 'password_input' value=admin123
-      Step 4: click on 'login_button'
-    
-    Assertions:
-      Assert url_contains — target='' value='/dashboard' — URL contains /dashboard
+    Positive test case that verifies a user can successfully login with
+    valid credentials and is redirected to the dashboard with proper URL
+    and visibility of dashboard header, while no error message is shown.
     """
     async with async_playwright() as p:
         browser = await p.chromium.launch()
         page = await browser.new_page()
-        login_page = Login(page)
+        login_page = LoginPage(page)
         
-        # Step 1: Navigate to target URL
+        # Step 1: navigate on target_url
         await login_page.navigate()
         
-        # Step 2: Fill username
+        # Step 2: wait on username_input value=visible
+        await expect(page.locator(login_page.username_input)).to_be_visible()
+        
+        # Step 3: fill on username_input value=Admin
         await login_page.fill_username("Admin")
         
-        # Step 3: Fill password
+        # Step 4: fill on password_input value=admin123
         await login_page.fill_password("admin123")
         
-        # Step 4: Click login button
+        # Step 5: click on login_button
         await login_page.click_login_button()
         
-        # Assertion 1: URL contains /dashboard
+        # Step 6: wait on dashboard_header value=visible
+        await expect(page.locator(login_page.dashboard_header)).to_be_visible()
+        
+        # Assertions
+        # Assert url_contains — target='current_url' value='/dashboard'
         await expect(page).to_have_url(re.compile(r'/dashboard'))
         
+        # Assert element_visible — target='dashboard_header' value=''
+        await expect(page.locator(login_page.dashboard_header)).to_be_visible()
+        
+        # Assert element_hidden — target='error_message' value=''
+        await expect(page.locator(login_page.error_message)).to_be_hidden()
+        
+        # Assert not_url_contains — target='current_url' value='/auth/login'
+        await expect(page).not_to_have_url(re.compile(r'/auth/login'))
+        
         await browser.close()
 
 
 @pytest.mark.asyncio
-async def test_tc_002_002():
+async def test_tc_001_009():
     """
-    TEST CASE TC_002_002: Verify login fails with invalid username
-    Type: Negative
-    Test Data: {"username": "invaliduser", "password": "admin123"}
+    TC_001_009: Verify 'Invalid credentials' error message with invalid username
     
-    Actions:
-      Step 1: navigate on 'target_url'
-      Step 2: fill on 'username_input' value=invaliduser
-      Step 3: fill on 'password_input' value=admin123
-      Step 4: click on 'login_button'
-    
-    Assertions:
-      Assert text_equals — target='error_message' value='Invalid credentials' — Error message 'Invalid credentials' is displayed
-      Assert element_visible — target='username_input' value='' — User remains on the login page
+    Negative test case that verifies login fails with invalid username
+    and displays the exact error message 'Invalid credentials'.
     """
     async with async_playwright() as p:
         browser = await p.chromium.launch()
         page = await browser.new_page()
-        login_page = Login(page)
+        login_page = LoginPage(page)
         
-        # Step 1: Navigate to target URL
+        # Step 1: navigate on target_url
         await login_page.navigate()
         
-        # Step 2: Fill invalid username
+        # Step 2: wait on username_input value=visible
+        await expect(page.locator(login_page.username_input)).to_be_visible()
+        
+        # Step 3: fill on username_input value=invaliduser
         await login_page.fill_username("invaliduser")
         
-        # Step 3: Fill password
+        # Step 4: fill on password_input value=admin123
         await login_page.fill_password("admin123")
         
-        # Step 4: Click login button
+        # Step 5: click on login_button
         await login_page.click_login_button()
         
-        # Assertion 1: Error message text equals 'Invalid credentials'
-        await expect(page.locator(login_page.error_message)).to_have_text("Invalid credentials")
+        # Step 6: wait on error_message value=visible
+        await expect(page.locator(login_page.error_message)).to_be_visible()
         
-        # Assertion 2: Username input is visible (user remains on login page)
-        await expect(page.locator(login_page.username_input)).to_be_visible()
+        # Assertions
+        # Assert url_contains — target='current_url' value='/auth/login'
+        await expect(page).to_have_url(re.compile(r'/auth/login'))
+        
+        # Assert element_visible — target='error_message' value=''
+        await expect(page.locator(login_page.error_message)).to_be_visible()
+        
+        # Assert text_equals — target='error_message' value='Invalid credentials'
+        await expect(page.locator(login_page.error_message)).to_have_text("Invalid credentials")
         
         await browser.close()
 
 
 @pytest.mark.asyncio
-async def test_tc_002_003():
+async def test_tc_001_010():
     """
-    TEST CASE TC_002_003: Verify login fails with valid username and incorrect password
-    Type: Negative
-    Test Data: {"username": "Admin", "password": "wrongpassword"}
+    TC_001_010: Verify 'Invalid credentials' error message with incorrect password
     
-    Actions:
-      Step 1: navigate on 'target_url'
-      Step 2: fill on 'username_input' value=Admin
-      Step 3: fill on 'password_input' value=wrongpassword
-      Step 4: click on 'login_button'
-    
-    Assertions:
-      Assert text_equals — target='error_message' value='Invalid credentials' — Error message 'Invalid credentials' is displayed
-      Assert element_visible — target='username_input' value='' — User remains on the login page
+    Negative test case that verifies login fails with incorrect password
+    and displays the exact error message 'Invalid credentials'.
     """
     async with async_playwright() as p:
         browser = await p.chromium.launch()
         page = await browser.new_page()
-        login_page = Login(page)
+        login_page = LoginPage(page)
         
-        # Step 1: Navigate to target URL
+        # Step 1: navigate on target_url
         await login_page.navigate()
         
-        # Step 2: Fill username
+        # Step 2: wait on username_input value=visible
+        await expect(page.locator(login_page.username_input)).to_be_visible()
+        
+        # Step 3: fill on username_input value=Admin
         await login_page.fill_username("Admin")
         
-        # Step 3: Fill incorrect password
+        # Step 4: fill on password_input value=wrongpassword
         await login_page.fill_password("wrongpassword")
         
-        # Step 4: Click login button
+        # Step 5: click on login_button
         await login_page.click_login_button()
         
-        # Assertion 1: Error message text equals 'Invalid credentials'
+        # Step 6: wait on error_message value=visible
+        await expect(page.locator(login_page.error_message)).to_be_visible()
+        
+        # Assertions
+        # Assert url_contains — target='current_url' value='/auth/login'
+        await expect(page).to_have_url(re.compile(r'/auth/login'))
+        
+        # Assert element_visible — target='error_message' value=''
+        await expect(page.locator(login_page.error_message)).to_be_visible()
+        
+        # Assert text_equals — target='error_message' value='Invalid credentials'
         await expect(page.locator(login_page.error_message)).to_have_text("Invalid credentials")
         
-        # Assertion 2: Username input is visible (user remains on login page)
+        await browser.close()
+
+
+@pytest.mark.asyncio
+async def test_tc_001_011():
+    """
+    TC_001_011: Verify validation feedback with empty username field
+    
+    Boundary test case that verifies validation error is displayed when
+    username field is left empty, indicating the field is required.
+    """
+    async with async_playwright() as p:
+        browser = await p.chromium.launch()
+        page = await browser.new_page()
+        login_page = LoginPage(page)
+        
+        # Step 1: navigate on target_url
+        await login_page.navigate()
+        
+        # Step 2: wait on username_input value=visible
         await expect(page.locator(login_page.username_input)).to_be_visible()
         
-        await browser.close()
-
-
-@pytest.mark.asyncio
-async def test_tc_002_004():
-    """
-    TEST CASE TC_002_004: Verify login fails with empty username
-    Type: Boundary
-    Test Data: {"username": "", "password": "admin123"}
-    
-    Actions:
-      Step 1: navigate on 'target_url'
-      Step 2: click on 'username_input'
-      Step 3: click on 'password_input'
-      Step 4: fill on 'password_input' value=admin123
-      Step 5: click on 'login_button'
-    
-    Assertions:
-      Assert url_contains — target='current_url' value='/auth/login' — User remains on login page after failed login attempt
-      Assert element_visible — target='username_error_message' value='' — Validation error message is displayed for empty username field
-      Assert text_contains — target='username_error_message' value='Required' — Error message contains 'Required' text indicating mandatory field validation
-    """
-    async with async_playwright() as p:
-        browser = await p.chromium.launch()
-        page = await browser.new_page()
-        login_page = Login(page)
-        
-        # Step 1: Navigate to target URL
-        await login_page.navigate()
-        
-        # Step 2: Click on username input
-        await page.locator(login_page.username_input).click()
-        
-        # Step 3: Click on password input
-        await page.locator(login_page.password_input).click()
-        
-        # Step 4: Fill password
+        # Step 3: fill on password_input value=admin123
         await login_page.fill_password("admin123")
         
-        # Step 5: Click login button
+        # Step 4: click on login_button
         await login_page.click_login_button()
         
-        # Assertion 1: URL contains /auth/login
+        # Step 5: wait on username_validation_error value=visible
+        await expect(page.locator(login_page.username_validation_error)).to_be_visible()
+        
+        # Assertions
+        # Assert url_contains — target='current_url' value='/auth/login'
         await expect(page).to_have_url(re.compile(r'/auth/login'))
         
-        # Assertion 2: Username error message is visible
-        await expect(page.locator(login_page.username_error_message)).to_be_visible()
+        # Assert element_visible — target='username_validation_error' value=''
+        await expect(page.locator(login_page.username_validation_error)).to_be_visible()
         
-        # Assertion 3: Username error message contains 'Required'
-        await expect(page.locator(login_page.username_error_message)).to_contain_text("Required")
+        # Assert text_contains — target='username_validation_error' value='Required'
+        await expect(page.locator(login_page.username_validation_error)).to_contain_text("Required")
         
         await browser.close()
 
 
 @pytest.mark.asyncio
-async def test_tc_002_005():
+async def test_tc_001_012():
     """
-    TEST CASE TC_002_005: Verify login fails with whitespace username
-    Type: Boundary
-    Test Data: {"username": "(whitespace)", "password": "admin123"}
+    TC_001_012: Verify validation feedback with empty password field
     
-    Actions:
-      Step 1: navigate on 'target_url'
-      Step 2: fill on 'username_input' value=(whitespace)
-      Step 3: fill on 'password_input' value=admin123
-      Step 4: click on 'login_button'
-    
-    Assertions:
-      Assert url_contains — target='current_url' value='/auth/login' — User remains on login page after failed login attempt
-      Assert element_visible — target='username_error_message' value='' — Validation error message is displayed for invalid username
-      Assert text_contains — target='username_error_message' value='Required' — Error message indicates validation failure for whitespace username
+    Boundary test case that verifies validation error is displayed when
+    password field is left empty, indicating the field is required.
     """
     async with async_playwright() as p:
         browser = await p.chromium.launch()
         page = await browser.new_page()
-        login_page = Login(page)
+        login_page = LoginPage(page)
         
-        # Step 1: Navigate to target URL
+        # Step 1: navigate on target_url
         await login_page.navigate()
         
-        # Step 2: Fill username with whitespace
+        # Step 2: wait on username_input value=visible
+        await expect(page.locator(login_page.username_input)).to_be_visible()
+        
+        # Step 3: fill on username_input value=Admin
+        await login_page.fill_username("Admin")
+        
+        # Step 4: click on login_button
+        await login_page.click_login_button()
+        
+        # Step 5: wait on password_validation_error value=visible
+        await expect(page.locator(login_page.password_validation_error)).to_be_visible()
+        
+        # Assertions
+        # Assert url_contains — target='current_url' value='/auth/login'
+        await expect(page).to_have_url(re.compile(r'/auth/login'))
+        
+        # Assert element_visible — target='password_validation_error' value=''
+        await expect(page.locator(login_page.password_validation_error)).to_be_visible()
+        
+        # Assert text_contains — target='password_validation_error' value='Required'
+        await expect(page.locator(login_page.password_validation_error)).to_contain_text("Required")
+        
+        await browser.close()
+
+
+@pytest.mark.asyncio
+async def test_tc_001_013():
+    """
+    TC_001_013: Verify validation feedback with both fields empty
+    
+    Boundary test case that verifies validation errors are displayed for
+    both username and password fields when both are left empty.
+    """
+    async with async_playwright() as p:
+        browser = await p.chromium.launch()
+        page = await browser.new_page()
+        login_page = LoginPage(page)
+        
+        # Step 1: navigate on target_url
+        await login_page.navigate()
+        
+        # Step 2: wait on username_input value=visible
+        await expect(page.locator(login_page.username_input)).to_be_visible()
+        
+        # Step 3: click on login_button
+        await login_page.click_login_button()
+        
+        # Step 4: wait on username_validation_error value=visible
+        await expect(page.locator(login_page.username_validation_error)).to_be_visible()
+        
+        # Assertions
+        # Assert url_contains — target='current_url' value='/auth/login'
+        await expect(page).to_have_url(re.compile(r'/auth/login'))
+        
+        # Assert element_visible — target='username_validation_error' value=''
+        await expect(page.locator(login_page.username_validation_error)).to_be_visible()
+        
+        # Assert element_visible — target='password_validation_error' value=''
+        await expect(page.locator(login_page.password_validation_error)).to_be_visible()
+        
+        # Assert text_contains — target='username_validation_error' value='Required'
+        await expect(page.locator(login_page.username_validation_error)).to_contain_text("Required")
+        
+        await browser.close()
+
+
+@pytest.mark.asyncio
+async def test_tc_001_014():
+    """
+    TC_001_014: Verify validation feedback with whitespace-only username
+    
+    Boundary test case that verifies error message is displayed when
+    username contains only whitespace, indicating invalid credentials.
+    """
+    async with async_playwright() as p:
+        browser = await p.chromium.launch()
+        page = await browser.new_page()
+        login_page = LoginPage(page)
+        
+        # Step 1: navigate on target_url
+        await login_page.navigate()
+        
+        # Step 2: wait on username_input value=visible
+        await expect(page.locator(login_page.username_input)).to_be_visible()
+        
+        # Step 3: fill on username_input value=(whitespace)
         await login_page.fill_username("   ")
         
-        # Step 3: Fill password
+        # Step 4: fill on password_input value=admin123
         await login_page.fill_password("admin123")
         
-        # Step 4: Click login button
+        # Step 5: click on login_button
         await login_page.click_login_button()
         
-        # Assertion 1: URL contains /auth/login
+        # Step 6: wait on error_message value=visible
+        await expect(page.locator(login_page.error_message)).to_be_visible()
+        
+        # Assertions
+        # Assert url_contains — target='current_url' value='/auth/login'
         await expect(page).to_have_url(re.compile(r'/auth/login'))
         
-        # Assertion 2: Username error message is visible
-        await expect(page.locator(login_page.username_error_message)).to_be_visible()
+        # Assert element_visible — target='error_message' value=''
+        await expect(page.locator(login_page.error_message)).to_be_visible()
         
-        # Assertion 3: Username error message contains 'Required'
-        await expect(page.locator(login_page.username_error_message)).to_contain_text("Required")
+        # Assert text_contains — target='error_message' value='Invalid credentials'
+        await expect(page.locator(login_page.error_message)).to_contain_text("Invalid credentials")
         
         await browser.close()
 
 
 @pytest.mark.asyncio
-async def test_tc_002_006():
+async def test_tc_001_015():
     """
-    TEST CASE TC_002_006: Verify login fails with empty password
-    Type: Boundary
-    Test Data: {"username": "Admin", "password": ""}
+    TC_001_015: Verify validation feedback with whitespace-only password
     
-    Actions:
-      Step 1: navigate on 'target_url'
-      Step 2: fill on 'username_input' value=Admin
-      Step 3: click on 'password_input'
-      Step 4: click on 'login_button'
-    
-    Assertions:
-      Assert url_contains — target='current_url' value='/auth/login' — User remains on login page after failed login attempt
-      Assert element_visible — target='password_error_message' value='' — Validation error message is displayed for empty password field
-      Assert text_contains — target='password_error_message' value='Required' — Error message contains 'Required' text indicating mandatory field validation
+    Boundary test case that verifies error message is displayed when
+    password contains only whitespace, indicating invalid credentials.
     """
     async with async_playwright() as p:
         browser = await p.chromium.launch()
         page = await browser.new_page()
-        login_page = Login(page)
+        login_page = LoginPage(page)
         
-        # Step 1: Navigate to target URL
+        # Step 1: navigate on target_url
         await login_page.navigate()
         
-        # Step 2: Fill username
+        # Step 2: wait on username_input value=visible
+        await expect(page.locator(login_page.username_input)).to_be_visible()
+        
+        # Step 3: fill on username_input value=Admin
         await login_page.fill_username("Admin")
         
-        # Step 3: Click on password input
-        await page.locator(login_page.password_input).click()
-        
-        # Step 4: Click login button
-        await login_page.click_login_button()
-        
-        # Assertion 1: URL contains /auth/login
-        await expect(page).to_have_url(re.compile(r'/auth/login'))
-        
-        # Assertion 2: Password error message is visible
-        await expect(page.locator(login_page.password_error_message)).to_be_visible()
-        
-        # Assertion 3: Password error message contains 'Required'
-        await expect(page.locator(login_page.password_error_message)).to_contain_text("Required")
-        
-        await browser.close()
-
-
-@pytest.mark.asyncio
-async def test_tc_002_007():
-    """
-    TEST CASE TC_002_007: Verify login fails with whitespace password
-    Type: Boundary
-    Test Data: {"username": "Admin", "password": "(whitespace)"}
-    
-    Actions:
-      Step 1: navigate on 'target_url'
-      Step 2: fill on 'username_input' value=Admin
-      Step 3: fill on 'password_input' value=(whitespace)
-      Step 4: click on 'login_button'
-    
-    Assertions:
-      Assert url_contains — target='current_url' value='/auth/login' — User remains on login page after failed login attempt
-      Assert element_visible — target='password_error_message' value='' — Validation error message is displayed for invalid password
-      Assert text_contains — target='password_error_message' value='Required' — Error message indicates validation failure for whitespace password
-    """
-    async with async_playwright() as p:
-        browser = await p.chromium.launch()
-        page = await browser.new_page()
-        login_page = Login(page)
-        
-        # Step 1: Navigate to target URL
-        await login_page.navigate()
-        
-        # Step 2: Fill username
-        await login_page.fill_username("Admin")
-        
-        # Step 3: Fill password with whitespace
+        # Step 4: fill on password_input value=(whitespace)
         await login_page.fill_password("   ")
         
-        # Step 4: Click login button
+        # Step 5: click on login_button
         await login_page.click_login_button()
         
-        # Assertion 1: URL contains /auth/login
+        # Step 6: wait on error_message value=visible
+        await expect(page.locator(login_page.error_message)).to_be_visible()
+        
+        # Assertions
+        # Assert url_contains — target='current_url' value='/auth/login'
         await expect(page).to_have_url(re.compile(r'/auth/login'))
         
-        # Assertion 2: Password error message is visible
-        await expect(page.locator(login_page.password_error_message)).to_be_visible()
+        # Assert element_visible — target='error_message' value=''
+        await expect(page.locator(login_page.error_message)).to_be_visible()
         
-        # Assertion 3: Password error message contains 'Required'
-        await expect(page.locator(login_page.password_error_message)).to_contain_text("Required")
+        # Assert text_contains — target='error_message' value='Invalid credentials'
+        await expect(page.locator(login_page.error_message)).to_contain_text("Invalid credentials")
         
         await browser.close()
 
 
 @pytest.mark.asyncio
-async def test_tc_002_008():
+async def test_tc_001_016():
     """
-    TEST CASE TC_002_008: Verify login fails with empty username and password
-    Type: Boundary
-    Test Data: {"username": "", "password": ""}
+    TC_001_016: Verify validation feedback with both fields containing whitespace only
     
-    Actions:
-      Step 1: navigate on 'target_url'
-      Step 2: click on 'username_input'
-      Step 3: click on 'password_input'
-      Step 4: click on 'login_button'
-    
-    Assertions:
-      Assert url_contains — target='current_url' value='/auth/login' — User remains on login page after failed login attempt
-      Assert element_visible — target='username_error_message' value='' — Validation error message is displayed for empty username field
-      Assert element_visible — target='password_error_message' value='' — Validation error message is displayed for empty password field
-      Assert text_contains — target='username_error_message' value='Required' — Username error message contains 'Required' text
-      Assert text_contains — target='password_error_message' value='Required' — Password error message contains 'Required' text
+    Boundary test case that verifies error message is displayed when
+    both username and password contain only whitespace.
     """
     async with async_playwright() as p:
         browser = await p.chromium.launch()
         page = await browser.new_page()
-        login_page = Login(page)
+        login_page = LoginPage(page)
         
-        # Step 1: Navigate to target URL
+        # Step 1: navigate on target_url
         await login_page.navigate()
         
-        # Step 2: Click on username input
-        await page.locator(login_page.username_input).click()
+        # Step 2: wait on username_input value=visible
+        await expect(page.locator(login_page.username_input)).to_be_visible()
         
-        # Step 3: Click on password input
-        await page.locator(login_page.password_input).click()
+        # Step 3: fill on username_input value=(whitespace)
+        await login_page.fill_username("   ")
         
-        # Step 4: Click login button
+        # Step 4: fill on password_input value=(whitespace)
+        await login_page.fill_password("   ")
+        
+        # Step 5: click on login_button
         await login_page.click_login_button()
         
-        # Assertion 1: URL contains /auth/login
-        await expect(page).to_have_url(re.compile(r'/auth/login'))
+        # Step 6: wait on error_message value=visible
+        await expect(page.locator(login_page.error_message)).to_be_visible()
         
-        # Assertion 2: Username error message is visible
-        await expect(page.locator(login_page.username_error_message)).to_be_visible()
-        
-        # Assertion 3: Password error message is visible
-        await expect(page.locator(login_page.password_error_message)).to_be_visible()
-        
-        # Assertion 4: Username error message contains 'Required'
-        await expect(page.locator(login_page.username_error_message)).to_contain_text("Required")
-        
-        # Assertion 5: Password error message contains 'Required'
-        await expect(page.locator(login_page.password_error_message)).to_contain_text("Required")
-        
-        await browser.close()
+        # Assertions
+        # Assert url_contains — target='current_url' value='/auth/login'
+        await expect(page).to_
