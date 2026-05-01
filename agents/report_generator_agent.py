@@ -7,6 +7,7 @@ WHAT IT DOES:
     Includes metrics, coverage, review findings, and
     estimated time saved vs manual effort.
     Saves to /outputs/pipeline_report.html
+    Also saves to /docs/index.html for GitHub Pages.
 
 THIS IS YOUR RECRUITER-FACING DEMO ARTIFACT.
     Share the GitHub Pages link on LinkedIn and your resume.
@@ -24,6 +25,7 @@ INPUT  : outputs/US_001_poc_structured.json      (Agent 1)
          outputs/review_report.md                 (Agent 5)
          outputs/coverage_report.md               (Agent 6)
 OUTPUT : outputs/pipeline_report.html
+         docs/index.html
 ─────────────────────────────────────────────────────────────────
 """
 
@@ -50,6 +52,7 @@ SCRIPTS_DIR  = OUTPUTS_DIR / "scripts"
 REVIEWED_DIR = SCRIPTS_DIR / "reviewed"
 FEATURES_DIR = OUTPUTS_DIR / "features"
 PAGES_DIR    = Path(__file__).parent.parent / "pages"
+DOCS_DIR     = Path(__file__).parent.parent / "docs"
 
 
 # ── System Prompt ──────────────────────────────────────────────
@@ -159,9 +162,7 @@ def collect_metrics(story_id: str) -> dict:
                     parts = line.split("|")
                     for part in parts:
                         if "critical" in part:
-                            num = ''.join(
-                                filter(str.isdigit, part)
-                            )
+                            num = ''.join(filter(str.isdigit, part))
                             if num:
                                 metrics["critical_issues"] += int(num)
                                 break
@@ -172,9 +173,7 @@ def collect_metrics(story_id: str) -> dict:
                     parts = line.split("|")
                     for part in parts:
                         if "major" in part:
-                            num = ''.join(
-                                filter(str.isdigit, part)
-                            )
+                            num = ''.join(filter(str.isdigit, part))
                             if num:
                                 metrics["major_issues"] += int(num)
                                 break
@@ -200,15 +199,13 @@ def collect_metrics(story_id: str) -> dict:
                 metrics["gaps_count"] += 1
 
     # Time saved estimate
-    # Manual effort: 30 min per AC (analysis) + 15 min per TC (writing)
-    # + 20 min per script (automation) + 45 min review
     manual_hours = (
         metrics["ac_count"] * 0.5 +
         metrics["test_case_count"] * 0.25 +
         metrics["script_files"] * 0.33 +
         metrics["reviewed_files"] * 0.75
     )
-    metrics["manual_hours"]    = round(manual_hours, 1)
+    metrics["manual_hours"]     = round(manual_hours, 1)
     metrics["pipeline_minutes"] = (
         metrics["ac_count"] * 2 +
         metrics["test_case_count"] * 0.5 +
@@ -354,8 +351,6 @@ def generate_html_report(metrics: dict, narrative: str) -> str:
     padding: 40px 20px;
   }}
   .container {{ max-width: 960px; margin: 0 auto; }}
-
-  /* Header */
   .header {{ text-align: center; margin-bottom: 48px; }}
   .badge {{
     display: inline-block;
@@ -373,8 +368,6 @@ def generate_html_report(metrics: dict, narrative: str) -> str:
   }}
   h1 span {{ color: var(--accent); }}
   .subtitle {{ color: var(--muted); font-size: 14px; }}
-
-  /* Cards */
   .card {{
     background: var(--surface);
     border: 1px solid var(--border);
@@ -387,8 +380,6 @@ def generate_html_report(metrics: dict, narrative: str) -> str:
     color: var(--accent); font-family: monospace;
     text-transform: uppercase; margin-bottom: 20px;
   }}
-
-  /* Metrics grid */
   .metrics-grid {{
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -409,8 +400,6 @@ def generate_html_report(metrics: dict, narrative: str) -> str:
     font-size: 12px; color: var(--muted);
     line-height: 1.4;
   }}
-
-  /* Coverage bar */
   .coverage-bar-bg {{
     background: var(--surface2);
     border-radius: 8px; height: 12px;
@@ -426,8 +415,6 @@ def generate_html_report(metrics: dict, narrative: str) -> str:
     display: flex; justify-content: space-between;
     font-size: 13px; color: var(--muted);
   }}
-
-  /* Review table */
   .review-row {{
     display: flex; justify-content: space-between;
     align-items: center; padding: 12px 0;
@@ -440,16 +427,11 @@ def generate_html_report(metrics: dict, narrative: str) -> str:
   }}
   .critical {{ background: rgba(239,68,68,0.15); color: #ef4444; }}
   .major    {{ background: rgba(245,158,11,0.15); color: #f59e0b; }}
-  .minor    {{ background: rgba(100,116,139,0.15); color: #94a3b8; }}
-
-  /* Test types */
   .type-pills {{ display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }}
   .type-pill {{
     padding: 4px 12px; border-radius: 20px;
     font-size: 12px; font-weight: 500;
   }}
-
-  /* AC badges */
   .ac-badges {{ display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }}
   .ac-badge {{
     background: rgba(0,212,255,0.1);
@@ -458,15 +440,11 @@ def generate_html_report(metrics: dict, narrative: str) -> str:
     border-radius: 6px; font-size: 12px;
     font-family: monospace;
   }}
-
-  /* Narrative */
   .narrative p {{
     color: var(--text); line-height: 1.8;
     margin-bottom: 14px;
   }}
   .narrative p:last-child {{ margin-bottom: 0; }}
-
-  /* Readiness */
   .readiness-badge {{
     display: inline-block;
     background: rgba(0,212,255,0.1);
@@ -476,8 +454,6 @@ def generate_html_report(metrics: dict, narrative: str) -> str:
     font-size: 16px; font-weight: 700;
     margin-top: 8px;
   }}
-
-  /* Time saved highlight */
   .highlight-box {{
     background: linear-gradient(
       135deg,
@@ -496,8 +472,6 @@ def generate_html_report(metrics: dict, narrative: str) -> str:
     font-size: 14px; color: var(--muted);
     margin-top: 6px;
   }}
-
-  /* Footer */
   .footer {{
     text-align: center; margin-top: 48px;
     padding-top: 20px;
@@ -505,7 +479,6 @@ def generate_html_report(metrics: dict, narrative: str) -> str:
     color: var(--muted); font-size: 12px;
     font-family: monospace;
   }}
-
   @media (max-width: 600px) {{
     .metrics-grid {{ grid-template-columns: 1fr 1fr; }}
   }}
@@ -514,7 +487,6 @@ def generate_html_report(metrics: dict, narrative: str) -> str:
 <body>
 <div class="container">
 
-  <!-- Header -->
   <div class="header">
     <div class="badge">QA PIPELINE REPORT</div>
     <h1>multi-agent-qe-<span>orchestrator</span></h1>
@@ -525,7 +497,6 @@ def generate_html_report(metrics: dict, narrative: str) -> str:
     </p>
   </div>
 
-  <!-- Key Metrics -->
   <div class="card">
     <div class="card-title">Pipeline Metrics</div>
     <div class="metrics-grid">
@@ -556,17 +527,14 @@ def generate_html_report(metrics: dict, narrative: str) -> str:
         <div class="metric-label">Test Coverage</div>
       </div>
     </div>
-
     <div class="ac-badges">{ac_ids_html}</div>
   </div>
 
-  <!-- Test Types -->
   <div class="card">
     <div class="card-title">Test Case Distribution</div>
     <div class="type-pills">{test_types_html}</div>
   </div>
 
-  <!-- Coverage -->
   <div class="card">
     <div class="card-title">Coverage Analysis</div>
     <div class="coverage-label">
@@ -595,7 +563,6 @@ def generate_html_report(metrics: dict, narrative: str) -> str:
     </div>
   </div>
 
-  <!-- Code Review -->
   <div class="card">
     <div class="card-title">Code Review Findings</div>
     <div class="review-row">
@@ -622,13 +589,10 @@ def generate_html_report(metrics: dict, narrative: str) -> str:
     </div>
   </div>
 
-  <!-- Time Saved -->
   <div class="card">
     <div class="card-title">Business Value</div>
     <div class="highlight-box">
-      <div class="highlight-big">
-        {metrics['manual_hours']}h
-      </div>
+      <div class="highlight-big">{metrics['manual_hours']}h</div>
       <div class="highlight-sub">
         of manual QA effort replaced by the pipeline
       </div>
@@ -655,7 +619,6 @@ def generate_html_report(metrics: dict, narrative: str) -> str:
     </div>
   </div>
 
-  <!-- Narrative -->
   <div class="card">
     <div class="card-title">Executive Summary</div>
     <div class="narrative">
@@ -663,11 +626,10 @@ def generate_html_report(metrics: dict, narrative: str) -> str:
     </div>
   </div>
 
-  <!-- Footer -->
   <div class="footer">
     multi-agent-qe-orchestrator ·
-    AutoGen 0.7.5 · Groq LLaMA3 ·
-    Shashank Kulkarni · QA Automation Lead
+    AutoGen 0.7.5 · Claude Haiku · Groq LLaMA3 ·
+    Shashank Kulkarni · QA Automation Lead · ISTQB CT-AI
   </div>
 
 </div>
@@ -687,10 +649,7 @@ def run(
     2. Generates LLM narrative summary
     3. Builds complete HTML report
     4. Saves to /outputs/pipeline_report.html
-
-    Args:
-        story_id : Story ID e.g. 'US_001_poc'
-        provider : LLM provider — groq, ollama, claude
+    5. Saves to /docs/index.html for GitHub Pages
     """
     model_name = PROVIDERS.get(provider, {}).get('model', 'unknown')
 
@@ -723,14 +682,21 @@ def run(
     print(f"\n  Building HTML report...")
     html = generate_html_report(metrics, narrative)
 
-    # Step 4 — Save
+    # Step 4 — Save to outputs/
     report_path = OUTPUTS_DIR / "pipeline_report.html"
     report_path.write_text(html, encoding='utf-8')
-
     print(f"  ✅ HTML report saved")
+
+    # Step 5 — Save to docs/ for GitHub Pages
+    DOCS_DIR.mkdir(parents=True, exist_ok=True)
+    docs_path = DOCS_DIR / "index.html"
+    docs_path.write_text(html, encoding='utf-8')
+    print(f"  ✅ GitHub Pages copy saved to docs/index.html")
+
     print(f"\n{'='*60}")
     print(f"  ✅ Report Generation Complete")
     print(f"\n  Report saved to : {report_path}")
+    print(f"  GitHub Pages    : {docs_path}")
     print(f"\n  PIPELINE SUMMARY:")
     print(f"  ─────────────────────────────────────")
     print(f"  Story           : {story_id}")
