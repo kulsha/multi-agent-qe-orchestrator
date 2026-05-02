@@ -685,6 +685,7 @@ def run(
         f"replaced — {metrics['time_saved_pct']:.0f}% time saved."
     )
     print(f"  ✅ Narrative generated")
+    
 
     # Step 3 — Build HTML
     print(f"\n  Building HTML report...")
