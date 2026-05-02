@@ -671,10 +671,18 @@ def run(
     print(f"     Manual hours : {metrics['manual_hours']}")
     print(f"     Time saved   : {metrics['time_saved_pct']:.0f}%")
 
-    # Step 2 — Generate narrative
+   # Step 2 — Generate narrative (hardcoded template — no LLM)
     print(f"\n  Generating executive summary...")
-    narrative = asyncio.run(
-        generate_narrative(metrics, provider)
+    narrative = (
+        f"Pipeline processed {metrics['ac_count']} acceptance criteria "
+        f"and generated {metrics['test_case_count']} test cases across "
+        f"{metrics['script_files']} Playwright script files "
+        f"({metrics['script_lines']} lines of code). "
+        f"Code review identified {metrics['critical_issues']} critical "
+        f"and {metrics['major_issues']} major issues. "
+        f"Test coverage: {metrics['coverage_pct']:.0f}%. "
+        f"Estimated {metrics['manual_hours']} hours of manual effort "
+        f"replaced — {metrics['time_saved_pct']:.0f}% time saved."
     )
     print(f"  ✅ Narrative generated")
 
